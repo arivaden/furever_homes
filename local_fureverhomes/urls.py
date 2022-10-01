@@ -16,8 +16,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from fureverhomes_users_app import views
+from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('',views.home, name='home')
+    path('', views.home, name='home'),
+    path('/create_account', views.create_account, name='create_account'),
 ]
