@@ -21,5 +21,5 @@ from django.conf import settings
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.home, name='home'),
-    path('/create_account', views.create_account, name='create_account'),
+    path('create_account/', views.create_account, name='create_account'),
 ]
