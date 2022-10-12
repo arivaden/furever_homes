@@ -1,0 +1,58 @@
+#heading{
+    text-align: center;
+    color: #367f36;
+    font-family: "Tw Cen MT";
+    font-weight: bold;
+    font-size: 60px;
+    margin-bottom: 0px;
+}
+body{
+    text-align: center;
+    color: #ffffff;
+    font-family: "Tw Cen MT";
+}
+#login_box{
+    position: fixed;
+    left: 600px;
+    right: 600px;
+    top: 150px;
+    bottom: 200px;
+
+    background-color: #367f36;
+
+    padding-top: 100px;
+    padding-bottom: 100px;
+    border-radius: 40px;
+
+    font-size: 24px;
+}
+button{
+    text-align: center;
+    padding: 10px;
+    font-size: 18px;
+    color: #000000;
+    font-family: "Tw Cen MT";
+    border-radius: 20px;
+    background-color: #eab363;
+    border-color: #eab363;
+    border-style: none;
+}
+input{
+    border-radius: 10px;
+    border-style: none;
+    font-size: 16px;
+    padding: 5px;
+    size: 50;
+}
+h2{
+    position: relative;
+    top: -100px;
+}
+#login_form{
+    position: relative;
+    top: -85px;
+}
+#create_account_prompt{
+    position: relative;
+    top: -90px;
+}

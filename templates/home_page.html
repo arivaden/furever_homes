@@ -1,20 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    {% load static %}
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="{% static 'style.css' %}">
     <title>Furever Homes Login</title>
 </head>
 <body>
-<h1> Welcome to Furever Homes! </h1>
-<p> Login to your account</p>
-<form>
-<label>Email: </label>
-    <input type="email" id="user_email">
-<label >Password: </label>
-    <input type="password" id="user_password">
-    <button type="button" id="login">Login</button>
-</form>
-<p> Don't have an account with us?</p>
-<button id="create_account" type="submit" onclick="location.href = '{% url 'create_account' %}'">Create Account</button>
+    <div id="heading"> Furever Homes </div>
+    <div id="login_box">
+        <h2> Login to your account</h2>
+        <form id="login_form">
+        <label>Email: </label>
+            <input type="email" id="user_email">
+        <br><br>
+        <label >Password: </label>
+            <input type="password" id="user_password">
+        <br><br>
+            <button type="button" id="login">Login</button>
+        </form>
+        <div id="create_account_prompt"> Don't have an account with us?
+            <button id="create_account" type="submit" onclick="location.href = '{% url 'create_account' %}'">Create Account</button>
+        </div>
+    </div>
 </body>
 </html>
