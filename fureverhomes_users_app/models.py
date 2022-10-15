@@ -2,7 +2,7 @@ import django
 import os
 from django.db import models
 from django.conf import settings
-settings.configure()
+#settings.configure()
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.contrib.auth.models import PermissionsMixin
 from django.core import validators
@@ -56,7 +56,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 	user_dob = models.DateField(blank=False)
 	user_address = models.CharField(max_length=100, blank=False)
 	is_staff = models.BooleanField(default=False)
-	is_active = models.BooleanField(default=True) #used for blocking, will be set false by moderator
+	is_active = models.BooleanField(default=True) # used for blocking, will be set false by moderator
 	USERNAME_FIELD = 'user_email'
 	objects = UserManager()
 
@@ -94,25 +94,25 @@ class Report(models.Model):
 	incident_dt = models.DateField
 	causes = ((1, 'Threatening Language'), (2, 'Demand of Payment'), (3, 'Other')) #complete later
 	report_cause = models.IntegerField(choices=causes)
-	report_images = models.ImageField(blank=True)
-	user_reported = models.ForeignKey(User, models.CASCADE)
-	user_filed = models.ForeignKey(User, on_delete=models.CASCADE)
-	moderator_assigned = models.ForeignKey(Moderator, on_delete=models.SET_NULL())
+	report_images = models.ImageField(blank=True, upload_to='report_photos')
+	user_reported = models.ForeignKey(User, models.CASCADE, related_name='reported')
+	user_reporter = models.ForeignKey(User, on_delete=models.CASCADE, related_name='reporter')
+	moderator_assigned = models.ForeignKey(Moderator, on_delete=models.PROTECT)
 
 class Message(models.Model):
 	message_id = models.BigAutoField(primary_key = True)
 	message_dt = models.DateTimeField
 	message_content = models.CharField(max_length=1000)
-	receiver_id = models.ForeignKey(User, models.SET_NULL)
-	sender_id = models.ForeignKey(User, models.SET_NULL)
+	receiver_id = models.ForeignKey(User, models.CASCADE, related_name='receiver')
+	sender_id = models.ForeignKey(User, models.CASCADE, related_name='sender')
 
 class PetProfile(models.Model):
 	pet_profile_id = models.AutoField(primary_key=True)
 	pet_name = models.CharField(max_length=30)
 	description = models.CharField(max_length=300)
-	profile_pic = models.ImageField
+	profile_pic = models.ImageField(upload_to='pet_profile_photos')
 	age_choices = [(0, 'Young'), (1, "Adult"), (2, "Senior")]
-	age = models.CharField(blank=True, choices=age_choices)
+	age = models.CharField(max_length=10, blank=True, choices=age_choices)
 	sexes = (('M', 'Male'), ('F', 'Female'))
 	sex = models.CharField(max_length=1, choices=sexes)
 	good_w_kids = models.BooleanField(default=False)
@@ -136,7 +136,7 @@ class PetProfile(models.Model):
 
 
 class Dog(PetProfile):
-	breed = models.CharField(20)
+	breed = models.CharField(max_length=20)
 
 class Cat(PetProfile):
 	is_declawed = models.BooleanField

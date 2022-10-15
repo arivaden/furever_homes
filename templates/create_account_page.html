@@ -5,7 +5,8 @@
     <title>Create Fureverhomes Account</title>
 </head>
 <body>
-    <form>
+    {% csrf_token %}
+    <form enctype="multipart/form-data">
         <label>First Name</label>
         <input type="text" id="firstname">
         <br>
