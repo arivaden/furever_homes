@@ -2,7 +2,7 @@ import django
 import os
 from django.db import models
 from django.conf import settings
-settings.configure()
+#settings.configure()
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.contrib.auth.models import PermissionsMixin
 from django.core import validators
@@ -97,7 +97,7 @@ class Report(models.Model):
 	report_images = models.ImageField(blank=True)
 	user_reported = models.ForeignKey(User, models.CASCADE)
 	user_filed = models.ForeignKey(User, on_delete=models.CASCADE)
-	moderator_assigned = models.ForeignKey(Moderator, on_delete=models.SET_NULL())
+	moderator_assigned = models.ForeignKey(Moderator, on_delete=models.SET_NULL)
 
 class Message(models.Model):
 	message_id = models.BigAutoField(primary_key = True)
