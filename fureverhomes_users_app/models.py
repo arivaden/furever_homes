@@ -15,6 +15,8 @@ class UserManager(BaseUserManager):
 		#Creates and saves a User with the given email and password.
 		if not email:
 			raise ValueError('The given email must be set')
+		if not password:
+			raise ValueError('You must create a password')
 
 		email = self.normalize_email(email)
 		user = self.model(email=email, **extra_fields)
@@ -60,7 +62,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 	USERNAME_FIELD = 'user_email'
 	objects = UserManager()
 
-	def __str__(self):
+	def getName(self):
 		return self.user_name
 
 #these are subclasses of User
@@ -82,7 +84,6 @@ class CurrentOwner(User):
 #moderator can block other users
 class Moderator(User):
 	mod_id = User.user_id
-	User.is_superuser = True
 
 	def block_user(self, user_to_block):
 		user_to_block.is_active = False
@@ -139,4 +140,4 @@ class Dog(PetProfile):
 	breed = models.CharField(max_length=20)
 
 class Cat(PetProfile):
-	is_declawed = models.BooleanField
+	is_declawed = models.BooleanField(default=False)
