@@ -1,5 +1,5 @@
 from django.test import TestCase
-from models import User, CurrentOwner, FutureOwner, Moderator
+from .models import User, CurrentOwner, FutureOwner, Moderator
 # Create your tests here.
 
 #DATABASE STUFF TEST CODE
