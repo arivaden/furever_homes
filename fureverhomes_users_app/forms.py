@@ -1,15 +1,21 @@
 from django import forms
-import models
+from .models import User
 
 
 class CreateAccount(forms.ModelForm):
 
 	class Meta:
 		USER_TYPES = ['Adopting a Pet', "Rehoming a Pet"]
-		model = models.User
-		fields = ['email', 'password', 'name', 'dob', 'address']
+		model = User
+		fields = ['user_email', 'user_password', 'user_name', 'user_dob', 'user_address']
 		profile_type = forms.RadioSelect(choices=USER_TYPES)
 
+class Login(forms.ModelForm):
+
+
+	class Meta:
+		fields = ['user_email','user_password']
+		model = User
 		'''
 #first name
 forms.CharField()

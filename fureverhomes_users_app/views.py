@@ -2,7 +2,6 @@ from django.shortcuts import render
 from .forms import CreateAccount
 from django.http import HttpResponse, HttpResponseRedirect
 # Create your views here.
-
 def home(request):
 	return render(request, 'home_page.html')
 
@@ -13,5 +12,4 @@ def create_account(request):
 			return HttpResponseRedirect('successfully created new account')
 		else:
 			return render(request, 'create_account_page.html')
-
 
