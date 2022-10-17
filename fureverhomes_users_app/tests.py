@@ -5,10 +5,10 @@ from .models import User, CurrentOwner, FutureOwner, Moderator, PetProfile, Dog,
 #DATABASE STUFF TEST CODE
 class UserTestCases(TestCase):
 	def make_User(self):
-		j = User.objects.create_user('test@gmail.com', 'password', user_name="Jon Doe")
-		c = CurrentOwner.objects.create_user('co@gmail.com', 'secret_password', user_name='Ms. Current Owner')
-		f = FutureOwner.objects.create_user('fo@gmail.com', 'secret_password123', user_name='Mr. Future Owner')
-		m = Moderator.objects.create_staffuser('mod@fureverhomes.com', 'mod_password', user_name = 'mrs. mod')
+		j = User.objects.create_user('test@gmail.com', 'password', user_name="Jon Doe", user_dob='2000-01-01')
+		c = CurrentOwner.objects.create_user('co@gmail.com', 'secret_password', user_name='Ms. Current Owner', user_dob='2000-01-01')
+		f = FutureOwner.objects.create_user('fo@gmail.com', 'secret_password123', user_name='Mr. Future Owner', user_dob='2000-01-01')
+		m = Moderator.objects.create_staffuser('mod@fureverhomes.com', 'mod_password', user_name = 'mrs. mod', user_dob='2000-01-01')
 
 	def make_Pet(self):
 		pet1 = Dog(pet_name='Charlie', description='a friendly dog')

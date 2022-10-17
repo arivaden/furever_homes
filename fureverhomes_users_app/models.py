@@ -11,7 +11,7 @@ from django.core import validators
 class UserManager(BaseUserManager):
 	use_in_migrations = True
 
-	def save_user(self, email, password, **extra_fields):
+	def save_user(self, email, password, user_dob, user_address, **extra_fields):
 		#Creates and saves a User with the given email and password.
 		if not email:
 			raise ValueError('The given email must be set')
