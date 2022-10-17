@@ -78,8 +78,8 @@ DATABASES = {
    'default': {
        'ENGINE': 'django.db.backends.mysql',
        'NAME': 'fureverhomes_db',
-       #'USER': 'madison',
-       'USER': 'localuser',
+       'USER': 'madison',
+       #'USER': 'localuser',
        'PASSWORD': 'databaseforpets',
        'HOST': 'localhost',
        'PORT': '3306',
