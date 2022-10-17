@@ -1,7 +1,7 @@
 import django
 import os
 from django.db import models
-from django.conf import settings
+#from django.conf import settings
 #settings.configure()
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.contrib.auth.models import PermissionsMixin
@@ -19,7 +19,7 @@ class UserManager(BaseUserManager):
 			raise ValueError('You must create a password')
 
 		email = self.normalize_email(email)
-		user = self.model(email=email, **extra_fields)
+		user = self.model(user_email=email, **extra_fields)
 
 		# Call this method for password hashing
 		user.set_password(password)
@@ -99,6 +99,7 @@ class Report(models.Model):
 	user_reported = models.ForeignKey(User, models.CASCADE, related_name='reported')
 	user_reporter = models.ForeignKey(User, on_delete=models.CASCADE, related_name='reporter')
 	moderator_assigned = models.ForeignKey(Moderator, on_delete=models.PROTECT)
+
 
 class Message(models.Model):
 	message_id = models.BigAutoField(primary_key = True)
