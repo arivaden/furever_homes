@@ -75,12 +75,12 @@ class FutureOwner(User):
 	good_w_kids = [(0, 'Must be good with kids'), (1, "Doesn't need to be good with kids")]
 	spayed_or_neutered = [(0, 'Must be spayed/neutered'), (1, "Doesn't need to be spayed/neutered")]
 	size = [(1, "Small"), (2, "Medium"), (3, "Large"), (4, "No Preference")]
-	size_pref = models.IntegerField(choices=size)
-	type_pref = models.TextField(max_length=5, choices=pet_type)
-	sex_pref = models.CharField(max_length=3, choices=pet_sex)
-	age_pref = models.IntegerField(choices=pet_age)
-	kids_pref = models.IntegerField(choices=good_w_kids)
-	fixed_pref = models.IntegerField(choices=spayed_or_neutered)
+	size_pref = models.IntegerField(default=4, choices=size)
+	type_pref = models.TextField(default='dog', max_length=5, choices=pet_type)
+	sex_pref = models.CharField(default='N', max_length=3, choices=pet_sex)
+	age_pref = models.IntegerField(default=0, choices=pet_age)
+	kids_pref = models.IntegerField(default=0, choices=good_w_kids)
+	fixed_pref = models.IntegerField(default=0, choices=spayed_or_neutered)
 
 	# user can input preferences specific for dogs/cats
 	def specific_preferences(self):
