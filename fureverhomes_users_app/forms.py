@@ -7,7 +7,7 @@ class CreateAccount(forms.ModelForm):
 	class Meta:
 		USER_TYPES = ['Adopting a Pet', "Rehoming a Pet"]
 		model = User
-		fields = ['user_email', 'password', 'user_name', 'user_dob', 'user_address']
+		fields = ['user_email', 'password', 'user_name', 'user_dob', 'user_zip']
 		profile_type = forms.RadioSelect(choices=USER_TYPES)
 
 class Login(forms.ModelForm):
