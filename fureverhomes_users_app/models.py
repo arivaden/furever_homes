@@ -151,7 +151,7 @@ class PetProfile(models.Model):
 	description = models.CharField(max_length=300)
 	profile_pic = models.ImageField(upload_to='pet_profile_photos')
 	age_choices = [(0, 'Young: 0-1 Years'), (1, "Adult: 1-6 Years"), (2, "Senior: 6+ Years")]
-	age = models.IntegerField(max_length=1, blank=True, choices=age_choices)
+	age = models.IntegerField(blank=True, choices=age_choices)
 	sexes = (('M', 'Male'), ('F', 'Female'), ('U', 'Unsure'))
 	sex = models.CharField(max_length=1, choices=sexes)
 	size_choices = ((1, "Small"), (2, "Medium"), (3, "Large"))
