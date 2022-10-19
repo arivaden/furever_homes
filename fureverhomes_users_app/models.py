@@ -54,10 +54,10 @@ class UserManager(BaseUserManager):
 
 class User(AbstractBaseUser, PermissionsMixin):
 	user_id = models.BigAutoField(primary_key=True)
-	user_email = models.CharField(unique=True, blank=False, max_length=30, validators=[validators.EmailValidator()])
-	user_name = models.CharField(max_length=50, blank=False)
-	user_dob = models.DateField(blank=False)
-	user_zip = models.CharField(blank=False, max_length=5, validators=[validators.RegexValidator(r'^\d{1,10}$')])
+	user_email = models.CharField(default="youremail@example.com", unique=True, blank=False, max_length=30, validators=[validators.EmailValidator()])
+	user_name = models.CharField(max_length=50, blank=False, default="YourName")
+	user_dob = models.DateField(blank=False, default='1999-01-01')
+	user_zip = models.CharField( default=10000, blank=False, max_length=5, validators=[validators.RegexValidator(r'^\d{1,10}$')])
 	is_staff = models.BooleanField(default=False)
 	is_active = models.BooleanField(default=True) # used for blocking, will be set false by moderator
 	USERNAME_FIELD = 'user_email'
