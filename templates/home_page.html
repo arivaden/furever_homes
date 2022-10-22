@@ -1,43 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'admin/css/base.css' %}" />
-    <link rel="stylesheet" href="{% static 'admin/css/autocomplete.css' %}" />
-    <link rel="stylesheet" href="{% static 'admin/css/login.css' %}" />
-
-
-    <title>Furever Homes Login</title>
-</head>
+{% extends "base.html" %}
 <body>
-    <div id="heading"> Furever Homes </div>
+{% block content %}
     <div id="login_box">
         <h2> Login to your account</h2>
-       <!-- <form id="login_form">
-        <label>Email: </label>
-            <input type="email" id="user_email">
-        <br><br>
-        <label >Password: </label>
-            <input type="password" id="user_password">
-        <br><br>
-            <button type="button" id="login">Login</button>
-        </form> -->
-        <form method="post">
-            {{ formset.Login }}
-            {% csrf_token %}
-            {{ form.as_p }}
-           <!-- <label>Email: </label>
-            <input type="email" id="user_email" value="{{ email }}">
-            <br><br>
-            <label >Password: </label>
-            <input type="password" id="user_password" value="{{ password }}">
-            <br><br>
-            <button type="submit">Login</button> -->
-        </form>
-        <div id="create_account_prompt"> Don't have an account with us?
-            <button id="create_account" type="submit" onclick="location.href = '{% url 'create_account' %}'">Create Account</button>
-        </div>
+        <button id="login" type="submit" onclick="location.href = '{% url 'login' %}' " class="btn btn-success">Login</button>
+        <p>Don't have an account? Create one <a href="{% url 'create_account' %}">here.</a></p>
     </div>
+{% endblock %}
 </body>
 </html>

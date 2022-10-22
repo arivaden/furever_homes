@@ -1,5 +1,6 @@
 from django import forms
-from .models import User
+from .models import User, CurrentOwner, FutureOwner
+from django.contrib.auth.forms import UserCreationForm
 
 
 class CreateAccount(forms.ModelForm):
@@ -10,11 +11,25 @@ class CreateAccount(forms.ModelForm):
 		fields = ['user_email', 'password', 'user_name', 'user_dob', 'user_zip']
 		profile_type = forms.RadioSelect(choices=USER_TYPES)
 
-class Login(forms.ModelForm):
 
+class CreateCOAccount(forms.ModelForm):
 
 	class Meta:
-		fields = ['user_email','password']
+		model = CurrentOwner
+		fields = ['user_email', 'password', 'user_name', 'user_dob', 'user_zip']
+
+
+class CreateFOAccount(forms.ModelForm):
+
+	class Meta:
+		model = FutureOwner
+		fields = ['user_email', 'password', 'user_name', 'user_dob', 'user_zip']
+
+
+class Login(forms.ModelForm):
+
+	class Meta:
+		fields = ['user_email', 'password']
 		model = User
 		'''
 #first name

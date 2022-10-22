@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <h1>Are you looking to adopt or rehome a pet?</h1>
+    <form action="" method="post" enctype="multipart/form-data">
+        {{ form|crispy }}
+        {% csrf_token %}
+        <button type="submit" id="new_account" value="submit" class="btn btn-success"> Create Account </button>
+    </form>
+{% endblock %}
