@@ -3,13 +3,23 @@ from .models import User, CurrentOwner, FutureOwner
 from django.contrib.auth.forms import UserCreationForm
 
 
+class getUserProfile(forms.Form):
+
+	class Meta:
+		USER_TYPES = [('fo', 'Adopting a Pet'), ('co', "Rehoming a Pet")]
+		profile_type = forms.RadioSelect(choices=USER_TYPES)
+		'''if profile_type == 'fo':
+					model = FutureOwner
+				else:
+					model = CurrentOwner'''
+
+
 class CreateAccount(forms.ModelForm):
 
 	class Meta:
-		USER_TYPES = ['Adopting a Pet', "Rehoming a Pet"]
-		model = User
+
 		fields = ['user_email', 'password', 'user_name', 'user_dob', 'user_zip']
-		profile_type = forms.RadioSelect(choices=USER_TYPES)
+
 
 
 class CreateCOAccount(forms.ModelForm):
@@ -25,6 +35,12 @@ class CreateFOAccount(forms.ModelForm):
 		model = FutureOwner
 		fields = ['user_email', 'password', 'user_name', 'user_dob', 'user_zip']
 
+
+class GetPreferences(forms.ModelForm):
+
+	class Meta:
+		model = FutureOwner
+		fields = ['type_pref', 'size_pref', 'age_pref', 'sex_pref', 'kids_pref', 'fixed_pref']
 
 class Login(forms.ModelForm):
 

@@ -106,10 +106,27 @@ class FutureOwner(User):
 
 		return pet_pool
 
-	# allows user to change preferences
-	def edit_preferences(self):
-		pass
+	# allows user to change preferences, must specify name of field being updated
+	def edit_preferences(self, type_pref=None, size_pref=None, age_pref=None, sex_pref=None, kids_pref=None, fixed_pref=None):
+		if type_pref is not None:
+			self.type_pref = type_pref
+		if size_pref is not None:
+			self.size_pref = size_pref
+		if age_pref is not None:
+			self.age_pref = age_pref
+		if sex_pref is not None:
+			self.sex_pref = sex_pref
+		if kids_pref is not None:
+			self.kids_pref = kids_pref
+		if fixed_pref is not None:
+			self.fixed_pref = fixed_pref
 
+	def to_CO(self):
+		new_co = CurrentOwner.objects.create_user(email=self.user_email, password=self.password, user_dob=self.user_dob, user_zip=self.user_zip)
+		new_co.user_id = self.user_id
+		new_co.user_name = self.user_name
+		new_co.save()
+		self.delete()
 
 class CurrentOwner(User):
 	co_id = User.user_id
@@ -117,6 +134,13 @@ class CurrentOwner(User):
 	def view_my_pets(self):
 		co_pets = PetProfile.objects.filter(current_owner=self.user_id)
 		return co_pets
+
+	def to_FO(self):
+		new_fo = FutureOwner.objects.create_user(email=self.user_email, password=self.password, user_dob=self.user_dob, user_zip=self.user_zip)
+		new_fo.user_id = self.user_id
+		new_fo.user_name = self.user_name
+		new_fo.save()
+		self.delete()
 
 #moderator can block other users
 class Moderator(User):
