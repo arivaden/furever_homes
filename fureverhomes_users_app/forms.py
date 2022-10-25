@@ -7,7 +7,7 @@ from django.contrib.auth.forms import UserCreationForm
 class NewPetProfile(forms.ModelForm):
 	class Meta:
 		model = PetProfile
-		fields = ['pet_name', 'description', 'profile_pic', 'age','sex','size','good_w_kids','spayed_or_neutered','rehoming_reason']
+		fields = ['pet_name', 'description', 'profile_pic', 'age', 'sex', 'size', 'good_w_kids', 'spayed_or_neutered', 'rehoming_reason']
 		labels = {
 			'pet_name': _("Name"),
 			'description': _("A short description of your pet so people can get to know them better"),

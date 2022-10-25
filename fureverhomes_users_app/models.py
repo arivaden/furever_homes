@@ -191,6 +191,7 @@ class PetProfile(models.Model):
 	good_w_kids = models.BooleanField(default=False)
 	spayed_or_neutered = models.BooleanField(default=False)
 	rehoming_reason = models.CharField(max_length=200)
+	date_uploaded = models.DateField(default="2022-10-25")
 	is_adopted = models.BooleanField(default=False)
 	current_owner = models.ForeignKey(to=CurrentOwner, on_delete=models.CASCADE)
 	interested_users = models.ManyToManyField(FutureOwner)
