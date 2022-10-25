@@ -1,7 +1,32 @@
 from django import forms
-from .models import User, CurrentOwner, FutureOwner
+from .models import User, CurrentOwner, FutureOwner, PetProfile
+from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.forms import UserCreationForm
 
+
+class NewPetProfile(forms.ModelForm):
+	class Meta:
+		model = PetProfile
+		fields = ['pet_name', 'description', 'profile_pic', 'age','sex','size','good_w_kids','spayed_or_neutered','rehoming_reason']
+		labels = {
+			'pet_name': _("Name"),
+			'description': _("A short description of your pet so people can get to know them better"),
+			'age': _("Age of the pet"),
+			'sex': _("Gender"),
+			'size': _("Size"),
+			'good_w_kids': _("Is the pet comfortable with children?"),
+			'spayed_or_neutered': _('Is the pet fixed?'),
+			'rehoming_reason': _("Please give a little information about why you're rehoming your pet")
+
+		}
+		help_texts = {
+			'age': _("""Note, we do not take puppies under 8 weeks or kittens under 10 weeks. 
+						If you are attempting to give away animals under this age you are in violation of our community guidelines
+						and will possibly be banned from the site or reported to the authorities."""),
+			'good_w_kids': _("If you're unsure, please put false."),
+			'spayed_or_neutered': _("If you don't know if your pet is spayed/neutered, please put false."),
+
+		}
 
 class getUserProfile(forms.Form):
 
@@ -27,6 +52,17 @@ class CreateCOAccount(forms.ModelForm):
 	class Meta:
 		model = CurrentOwner
 		fields = ['user_email', 'password', 'user_name', 'user_dob', 'user_zip']
+		labels = {
+			'user_email': _('Email'),
+			'password' : _("Password"),
+			'user_dob' : _("Date of Birth"),
+			'user_zip': _("Zipcode")
+
+		}
+
+		help_texts = {
+			'user_dob': "YYYY-MM-DD format"
+		}
 
 
 class CreateFOAccount(forms.ModelForm):
@@ -34,13 +70,32 @@ class CreateFOAccount(forms.ModelForm):
 	class Meta:
 		model = FutureOwner
 		fields = ['user_email', 'password', 'user_name', 'user_dob', 'user_zip']
+		labels = {
+			'user_email': _('Email'),
+			'password': _("Password"),
+			'user_dob': _("Your date of Birth"),
+			'user_zip': _("Zipcode")
 
+		}
+
+		help_texts = {
+			'user_dob' : "YYYY-MM-DD format"
+		}
 
 class GetPreferences(forms.ModelForm):
 
 	class Meta:
 		model = FutureOwner
 		fields = ['type_pref', 'size_pref', 'age_pref', 'sex_pref', 'kids_pref', 'fixed_pref']
+		labels = {
+			'type_pref': _('What kind of pet are you looking for?'),
+			'size_pref': _("Size"),
+			'age_pref': _("Age"),
+			'sex_pref': _("Gender"),
+			'kids_pref': _("Should the pet be good with kids?"),
+			'fixed_pref': _("Should the pet be fixed?")
+
+		}
 
 class Login(forms.ModelForm):
 

@@ -1,6 +1,7 @@
 from django.http import HttpResponseRedirect
-from django.shortcuts import render
-from .forms import CreateAccount, getUserProfile, CreateCOAccount, CreateFOAccount
+from django.shortcuts import render, get_object_or_404
+from .forms import CreateAccount, getUserProfile, CreateCOAccount, CreateFOAccount, NewPetProfile
+from .models import PetProfile
 from .forms import Login
 
 
@@ -46,3 +47,19 @@ def create_account_page(request):
     else:
         form = CreateAccount()
     return render(request, "registration/create_account_page.html", {"form": form})
+
+"""
+def create_pet_profile(request, Owner):
+    if request.method == "POST":
+        form = NewPetProfile(request.POST)
+        if form.is_valid():
+            form.cleaned_data['current_owner'] = Owner
+            form.save()
+    else:
+        form = NewPetProfile()
+    return render(request, "/my_pets.html" , {"form" : form})
+
+def render_pet_profile(request, pet_id):
+    pet = get_object_or_404(PetProfile, id=pet_id)
+    return render(request, "/", {"pet": pet})
+"""
