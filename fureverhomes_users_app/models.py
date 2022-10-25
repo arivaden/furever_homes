@@ -120,6 +120,7 @@ class FutureOwner(User):
 			self.kids_pref = kids_pref
 		if fixed_pref is not None:
 			self.fixed_pref = fixed_pref
+		self.save()
 
 	def to_CO(self):
 		new_co = CurrentOwner.objects.create_user(email=self.user_email, password=self.password, user_dob=self.user_dob, user_zip=self.user_zip)
@@ -132,15 +133,22 @@ class CurrentOwner(User):
 	co_id = User.user_id
 
 	def view_my_pets(self):
-		co_pets = PetProfile.objects.filter(current_owner=self.user_id)
+		co_pets = PetProfile.objects.filter(current_owner=self.user_id).exclude(is_adopted=True)
+		return co_pets
+
+	def view_my_adopted_pets(self):
+		co_pets = PetProfile.objects.filter(current_owner=self.user_id, is_adopted=True)
 		return co_pets
 
 	def to_FO(self):
-		new_fo = FutureOwner.objects.create_user(email=self.user_email, password=self.password, user_dob=self.user_dob, user_zip=self.user_zip)
-		new_fo.user_id = self.user_id
-		new_fo.user_name = self.user_name
-		new_fo.save()
-		self.delete()
+		if len(self.view_my_pets()) == 0:
+			new_fo = FutureOwner.objects.create_user(email=self.user_email, password=self.password, user_dob=self.user_dob, user_zip=self.user_zip)
+			new_fo.user_id = self.user_id
+			new_fo.user_name = self.user_name
+			new_fo.save()
+			self.delete()
+		else:
+			raise Exception("Cannot adopt a pet while you still have pets up for adoption.")
 
 #moderator can block other users
 class Moderator(User):
