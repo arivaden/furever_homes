@@ -19,7 +19,9 @@ class UserManager(BaseUserManager):
 			raise ValueError('You must create a password')
 
 		email = self.normalize_email(email)
-		user = self.model(user_email=email, **extra_fields)
+		user = self.model(
+			user_email=email,
+			**extra_fields)
 
 		# Call this method for password hashing
 		user.set_password(password)
@@ -59,7 +61,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 	user_dob = models.DateField(blank=False, default='1999-01-01')
 	user_zip = models.CharField( default=10000, blank=False, max_length=5, validators=[validators.RegexValidator(r'^\d{1,10}$')])
 	is_staff = models.BooleanField(default=False)
-	is_active = models.BooleanField(default=True) # used for blocking, will be set false by moderator
+	is_active = models.BooleanField(default=True)  # used for blocking, will be set false by moderator
 	USERNAME_FIELD = 'user_email'
 	objects = UserManager()
 
@@ -177,6 +179,7 @@ class Message(models.Model):
 	receiver_id = models.ForeignKey(User, models.CASCADE, related_name='receiver')
 	sender_id = models.ForeignKey(User, models.CASCADE, related_name='sender')
 
+
 class PetProfile(models.Model):
 	pet_profile_id = models.AutoField(primary_key=True)
 	pet_name = models.CharField(max_length=30)
@@ -196,8 +199,10 @@ class PetProfile(models.Model):
 	current_owner = models.ForeignKey(to=CurrentOwner, on_delete=models.CASCADE)
 	interested_users = models.ManyToManyField(FutureOwner)
 
+
 class Dog(PetProfile):
 	breed = models.CharField(max_length=20)
+
 
 class Cat(PetProfile):
 	is_declawed = models.BooleanField(default=False)

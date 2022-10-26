@@ -1,8 +1,7 @@
 from django.http import HttpResponseRedirect
-from django.shortcuts import render, get_object_or_404
-from .forms import CreateAccount, getUserProfile, CreateCOAccount, CreateFOAccount, NewPetProfile
-from .models import PetProfile
-from .forms import Login
+from django.shortcuts import render
+from .forms import CreateCOAccount, CreateFOAccount, Login, NewPetProfile
+from .models import CurrentOwner, FutureOwner, PetProfile
 
 
 def home(request):
@@ -10,7 +9,7 @@ def home(request):
     if request.method == "POST":
         if form.is_valid():
             form.save()
-            return HttpResponseRedirect('dashboard')
+            return HttpResponseRedirect('dashboard/dashboard.html')
     else:
         form = Login()
     return render(request, 'home_page.html', {'form': form})
@@ -21,45 +20,43 @@ def error(request):
 
 
 def dashboard(request):
-    return render(request, 'dashboard.html')
+    return render(request, 'dashboard/dashboard.html')
 
-def get_account_type(request):
-    if request.method == "POST":
-        form = getUserProfile(request.POST)
-        if form.is_valid():
-            form.save()
-        if form.cleaned_data['profile_type'] == 'fo':
-            account_form = CreateFOAccount(request.POST)
-        else:
-            account_form = CreateCOAccount(request.POST)
-    else:
-        form = getUserProfile()
-        account_form = None
-    return account_form
 
-def create_account_page(request):
-    if request.method == "POST":
-        form_to_use = get_account_type(request)
-        form = form_to_use
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect('/dashboard')
-    else:
-        form = CreateAccount()
-    return render(request, "registration/create_account_page.html", {"form": form})
+def select_account_type(request):
+    return render(request, "registration/select_account_type.html")
 
-"""
-def create_pet_profile(request, Owner):
-    if request.method == "POST":
-        form = NewPetProfile(request.POST)
-        if form.is_valid():
-            form.cleaned_data['current_owner'] = Owner
-            form.save()
-    else:
-        form = NewPetProfile()
-    return render(request, "/my_pets.html" , {"form" : form})
 
-def render_pet_profile(request, pet_id):
-    pet = get_object_or_404(PetProfile, id=pet_id)
-    return render(request, "/", {"pet": pet})
-"""
+def create_co_account(request):
+    form = CreateCOAccount(request.POST)
+    if form.is_valid():
+        user_email = form.cleaned_data['user_email']
+        password = form.cleaned_data['password']
+        user_name = form.cleaned_data['user_name']
+        user_dob = form.cleaned_data['user_dob']
+        user_zip = form.cleaned_data['user_zip']
+        CurrentOwner.objects.create_user(email=user_email, password=password, user_name=user_name, user_dob=user_dob, user_zip=user_zip)
+        return render(request, 'dashboard/co_dashboard.html')
+    return render(request, 'registration/create_co_account.html', {'form': form})
+
+
+def create_fo_account(request):
+    form = CreateFOAccount(request.POST)
+    if form.is_valid():
+        user_email = form.cleaned_data['user_email']
+        password = form.cleaned_data['password']
+        user_name = form.cleaned_data['user_name']
+        user_dob = form.cleaned_data['user_dob']
+        user_zip = form.cleaned_data['user_zip']
+        FutureOwner.objects.create_user(email=user_email, password=password, user_name=user_name, user_dob=user_dob,
+                              user_zip=user_zip)
+        return render(request, 'dashboard/fo_dashboard.html')
+    return render(request, 'registration/create_fo_account.html', {'form': form})
+
+
+def co_dashboard(request):
+    return render(request, 'dashboard/co_dashboard')
+
+
+def fo_dashboard(request):
+    return render(request, 'dashboard/fo_dashboard')

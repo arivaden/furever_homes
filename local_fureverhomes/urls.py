@@ -7,6 +7,9 @@ urlpatterns = [
     path("accounts/", include("django.contrib.auth.urls")),
     path('', views.home, name='home'),
     path('login_error/', views.error, name='error'),
-    path('create_account/', views.create_account_page, name='create_account'),
-    path('dashboard/', views.dashboard, name='dashboard'),
+    path('select_account_type/', views.select_account_type, name='select_account_type'),
+    path('create_co_account/', views.create_co_account, name='create_co_account'),
+    path('create_fo_account/', views.create_fo_account, name='create_fo_account'),
+    path('co_dashboard/', views.co_dashboard, name='co_dashboard'),
+    path('fo_dashboard/', views.fo_dashboard, name='fo_dashboard'),
 ]

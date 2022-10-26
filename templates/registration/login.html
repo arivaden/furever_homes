@@ -5,7 +5,7 @@
     <form method="post">
     {% csrf_token %}
     {{ form.as_div }}
-            <p>Don't have an account? Create one <a href="{% url 'create_account' %}">here.</a></p>
+            <p>Don't have an account? Create one <a href="{% url 'select_account_type' %}">here.</a></p>
             <button type="submit" class="btn btn-success">Log In</button>
         </form>
     </div>

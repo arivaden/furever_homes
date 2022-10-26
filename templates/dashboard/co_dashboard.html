@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <h1>Welcome to Furever Homes</h1>
+    <h2>Create a profile for your pet <a href="{% url 'create_pet_profile' %}">here.</a></h2>
+{% endblock %}
