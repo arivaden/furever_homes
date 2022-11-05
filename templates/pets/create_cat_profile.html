@@ -1,16 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
 {% extends "base.html" %}
 {% load crispy_forms_tags %}
-
-<head>
-    <meta charset="UTF-8">
-    <title>Create a profile for your pet</title>
-</head>
+{% block content %}
+<h2>Create a profile for your pet</h2>
 <form action="" method="post" enctype="multipart/form-data">
         {{ form|crispy }}
         {% csrf_token %}
         <button type="submit" class="btn btn-success">Create Pet Profile</button>
 </form>
-
-</html>
+{% endblock %}
