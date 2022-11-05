@@ -130,6 +130,7 @@ USE_TZ = True
 STATIC_URL = 'fureverhomes_users_app/static/'
 
 LOGIN_REDIRECT_URL = "/dashboard"
+LOGOUT_REDIRECT_URL = "home"
 
 MEDIA_ROOT = BASE_DIR/'media'
 
@@ -140,3 +141,6 @@ STATIC_ROOT = 'furever_homes/fureverhomes_users_app/static'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'fureverhomes_users_app.User'
+
+# this makes http into https, more secure
+SECURE_SSL_REDIRECT = True

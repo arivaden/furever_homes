@@ -12,4 +12,7 @@ urlpatterns = [
     path('create_fo_account/', views.create_fo_account, name='create_fo_account'),
     path('co_dashboard/', views.co_dashboard, name='co_dashboard'),
     path('fo_dashboard/', views.fo_dashboard, name='fo_dashboard'),
+    path('select_pet_type/', views.select_pet_type, name='select_pet_type'),
+    path('create_dog_profile/', views.create_dog_profile, name="create_dog_profile"),
+    path('create_cat_profile/', views.create_cat_profile, name="create_cat_profile"),
 ]

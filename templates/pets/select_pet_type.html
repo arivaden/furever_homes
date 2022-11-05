@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <h1>Please select the type of pet you want to rehome</h1>
+    <button type="submit" onclick="location.href = '{% url 'create_cat_profile' %}'" value="submit" class="btn btn-success">Cat</button>
+    <button type="submit" onclick="location.href = '{% url 'create_dog_profile' %}'" value="submit" class="btn btn-success">Dog</button>
+{% endblock %}

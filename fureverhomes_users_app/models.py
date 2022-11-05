@@ -180,6 +180,19 @@ class Message(models.Model):
 	sender_id = models.ForeignKey(User, models.CASCADE, related_name='sender')
 
 
+class PetManager(models.Manager):
+
+	def create_pet_profile(self, co, pet_name, **extra_fields):
+		extra_fields['is_adopted'] = False
+		#date will automatically be added, like id
+		if not pet_name:
+			raise ValueError('You must give the name of your pet')
+		pet = self.model(pet_name=pet_name, current_owner=co, **extra_fields)
+		pet.save(using=self._db)
+		return pet
+
+
+
 class PetProfile(models.Model):
 	pet_profile_id = models.AutoField(primary_key=True)
 	pet_name = models.CharField(max_length=30)
@@ -194,10 +207,14 @@ class PetProfile(models.Model):
 	good_w_kids = models.BooleanField(default=False)
 	spayed_or_neutered = models.BooleanField(default=False)
 	rehoming_reason = models.CharField(max_length=200)
-	date_uploaded = models.DateField(default="2022-10-25")
+	date_uploaded = models.DateField(default="2022-10-25", auto_now_add=True)
 	is_adopted = models.BooleanField(default=False)
 	current_owner = models.ForeignKey(to=CurrentOwner, on_delete=models.CASCADE)
 	interested_users = models.ManyToManyField(FutureOwner)
+	objects = PetManager()
+
+	class Meta:
+		ordering = ["date_uploaded"]
 
 
 class Dog(PetProfile):

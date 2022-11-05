@@ -1,24 +1,30 @@
 from django import forms
-from .models import User, CurrentOwner, FutureOwner, PetProfile
+from .models import User, CurrentOwner, FutureOwner, PetProfile, Dog, Cat
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.forms import UserCreationForm
 
+# do not delete, want to try and get this to work with dynamically generating forms
+class PetType(forms.Form):
+	pets = [('d','Dog'), ('c',"Cat")]
+	pet_type = forms.RadioSelect(choices=pets)
 
-class NewPetProfile(forms.ModelForm):
+#parent form for pet forms
+class PetForm(forms.ModelForm):
 	class Meta:
 		model = PetProfile
-		fields = ['pet_name', 'description', 'profile_pic', 'age', 'sex', 'size', 'good_w_kids', 'spayed_or_neutered', 'rehoming_reason']
+		fields = ['pet_name', 'description', 'profile_pic', 'age',
+				  'sex', 'size', 'good_w_kids', 'spayed_or_neutered', 'rehoming_reason']
 		labels = {
 			'pet_name': _("Name"),
 			'description': _("A short description of your pet so people can get to know them better"),
-			'age': _("Age of the pet"),
+			'age': _("Pet's age"),
 			'sex': _("Gender"),
 			'size': _("Size"),
 			'good_w_kids': _("Is the pet comfortable with children?"),
-			'spayed_or_neutered': _('Is the pet fixed?'),
+			'spayed_or_neutered': _('Are they fixed?'),
 			'rehoming_reason': _("Please give a little information about why you're rehoming your pet")
 
-		}
+			}
 		help_texts = {
 			'age': _("""Note, we do not take puppies under 8 weeks or kittens under 10 weeks. 
 						If you are attempting to give away animals under this age you are in violation of our community guidelines
@@ -26,7 +32,20 @@ class NewPetProfile(forms.ModelForm):
 			'good_w_kids': _("If you're unsure, please put false."),
 			'spayed_or_neutered': _("If you don't know if your pet is spayed/neutered, please put false."),
 
-		}
+			}
+
+class DogForm(PetForm):
+	class Meta(PetForm.Meta):
+		model = Dog
+		fields = ['pet_name', 'description', 'profile_pic', 'age',
+				  'sex', 'size', 'good_w_kids', 'spayed_or_neutered', 'rehoming_reason', 'breed']
+
+class CatForm(PetForm):
+	class Meta(PetForm.Meta):
+		model = Cat
+		fields = ['pet_name', 'description', 'profile_pic', 'age',
+				  'sex', 'size', 'good_w_kids', 'spayed_or_neutered', 'rehoming_reason', 'is_declawed']
+
 
 class getUserProfile(forms.Form):
 
