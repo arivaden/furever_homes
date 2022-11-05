@@ -142,5 +142,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'fureverhomes_users_app.User'
 
-# this makes http into https, more secure
-SECURE_SSL_REDIRECT = True
+# this makes http into https, more secure BUT cannot use it as development server only deals with HTTP
+# SECURE_SSL_REDIRECT = True
