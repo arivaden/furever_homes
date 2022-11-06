@@ -1,6 +1,8 @@
 from django.contrib import admin
 from fureverhomes_users_app import views
 from django.urls import path, include
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -15,4 +17,4 @@ urlpatterns = [
     path('select_pet_type/', views.select_pet_type, name='select_pet_type'),
     path('create_dog_profile/', views.create_dog_profile, name="create_dog_profile"),
     path('create_cat_profile/', views.create_cat_profile, name="create_cat_profile"),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

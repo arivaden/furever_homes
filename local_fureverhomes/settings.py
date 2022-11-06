@@ -133,6 +133,7 @@ LOGIN_REDIRECT_URL = "/dashboard"
 LOGOUT_REDIRECT_URL = "home"
 
 MEDIA_ROOT = BASE_DIR/'media'
+MEDIA_URL = ''
 
 STATIC_ROOT = 'furever_homes/fureverhomes_users_app/static'
 # Default primary key field type
