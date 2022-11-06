@@ -17,6 +17,7 @@ class PetForm(forms.ModelForm):
 		labels = {
 			'pet_name': _("Name"),
 			'description': _("A short description of your pet so people can get to know them better"),
+			'profile_pic':_("Profile Photo"),
 			'age': _("Pet's age"),
 			'sex': _("Gender"),
 			'size': _("Size"),
@@ -29,8 +30,8 @@ class PetForm(forms.ModelForm):
 			'age': _("""Note, we do not take puppies under 8 weeks or kittens under 10 weeks. 
 						If you are attempting to give away animals under this age you are in violation of our community guidelines
 						and will possibly be banned from the site or reported to the authorities."""),
-			'good_w_kids': _("If you're unsure, please put false."),
-			'spayed_or_neutered': _("If you don't know if your pet is spayed/neutered, please put false."),
+			'good_w_kids': _("If you're unsure, please don't check the box."),
+			'spayed_or_neutered': _("If you don't know if your pet is spayed/neutered, please don't check the box."),
 
 			}
 
