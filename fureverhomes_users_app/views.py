@@ -20,7 +20,13 @@ def error(request):
 
 
 def dashboard(request):
-    return render(request, 'dashboard/dashboard.html')
+    usertype = type(request.user)
+    if usertype is CurrentOwner:
+        return render(request, 'dashboard/co_dashboard.html')
+    elif usertype is FutureOwner:
+        return render(request, 'dashboard/fo_dashboard.html')
+    else:
+        return render(request, 'dashboard/dashboard.html')
 
 
 def select_account_type(request):
