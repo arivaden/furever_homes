@@ -20,14 +20,19 @@ def error(request):
 
 
 def dashboard(request):
-    usertype = type(request.user)
-    print(usertype)
-    if usertype is CurrentOwner:
+    id = request.user.user_id
+    isCo = True
+
+    try:
+        co = CurrentOwner.objects.get(user_id=id)
+    except CurrentOwner.DoesNotExist:
+        isCo = False
+
+    if isCo:
         return render(request, 'dashboard/co_dashboard.html')
-    elif usertype is FutureOwner:
-        return render(request, 'dashboard/fo_dashboard.html')
     else:
-        return render(request, 'dashboard/dashboard.html')
+        return render(request, 'dashboard/fo_dashboard.html')
+    #return render(request, 'dashboard/dashboard.html')
 
 
 def select_account_type(request):
