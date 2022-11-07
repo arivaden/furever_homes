@@ -21,6 +21,7 @@ def error(request):
 
 def dashboard(request):
     usertype = type(request.user)
+    print(usertype)
     if usertype is CurrentOwner:
         return render(request, 'dashboard/co_dashboard.html')
     elif usertype is FutureOwner:
