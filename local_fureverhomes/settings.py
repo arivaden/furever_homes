@@ -129,7 +129,7 @@ USE_TZ = True
 
 STATIC_URL = 'fureverhomes_users_app/static/'
 
-LOGIN_REDIRECT_URL = "/dashboard"
+LOGIN_REDIRECT_URL = "dashboard"
 LOGOUT_REDIRECT_URL = "home"
 
 MEDIA_ROOT = BASE_DIR/'media'
