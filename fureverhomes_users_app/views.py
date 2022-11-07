@@ -9,7 +9,7 @@ def home(request):
     if request.method == "POST":
         if form.is_valid():
             form.save()
-            return HttpResponseRedirect('dashboard/dashboard.html')
+            dashboard(request) #return HttpResponseRedirect('dashboard/dashboard.html')
     else:
         form = Login()
     return render(request, 'home_page.html', {'form': form})
