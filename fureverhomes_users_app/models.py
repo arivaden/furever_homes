@@ -68,6 +68,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 	def getName(self):
 		return self.user_name
 
+
 #these are subclasses of User
 class FutureOwner(User):
 	fo_id = User.user_id

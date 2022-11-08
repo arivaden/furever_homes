@@ -9,7 +9,7 @@ def home(request):
     if request.method == "POST":
         if form.is_valid():
             form.save()
-            return HttpResponseRedirect('dashboard/dashboard.html')
+            dashboard(request) #return HttpResponseRedirect('dashboard/dashboard.html')
     else:
         form = Login()
     return render(request, 'home_page.html', {'form': form})
@@ -20,13 +20,19 @@ def error(request):
 
 
 def dashboard(request):
-    usertype = type(request.user)
-    if usertype is CurrentOwner:
+    id = request.user.user_id
+    isCo = True
+
+    try:
+        co = CurrentOwner.objects.get(user_id=id)
+    except CurrentOwner.DoesNotExist:
+        isCo = False
+
+    if isCo:
         return render(request, 'dashboard/co_dashboard.html')
-    elif usertype is FutureOwner:
-        return render(request, 'dashboard/fo_dashboard.html')
     else:
-        return render(request, 'dashboard/dashboard.html')
+        return render(request, 'dashboard/fo_dashboard.html')
+    #return render(request, 'dashboard/dashboard.html')
 
 
 def select_account_type(request):
@@ -106,7 +112,7 @@ def create_dog_profile(request):
         good_w_kids = form.cleaned_data['good_w_kids']
         spayed_or_neutered = form.cleaned_data['spayed_or_neutered']
         rehoming_reason = form.cleaned_data['rehoming_reason']
-        owner = request.user.user_id
+        owner = CurrentOwner.objects.get(user_id=request.user.user_id)
         breed = form.cleaned_data['breed']
         Dog.objects.create_pet_profile(owner, pet_name, description=description, profile_pic=profile_pic, age=age, sex=sex, size=size, good_w_kids=good_w_kids, spayed_or_neutered=spayed_or_neutered, rehoming_reason=rehoming_reason, breed=breed)
         return render(request, 'dashboard/co_dashboard.html')
