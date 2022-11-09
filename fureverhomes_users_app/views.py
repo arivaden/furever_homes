@@ -67,7 +67,7 @@ def create_fo_account(request):
 
 
 def co_dashboard(request):
-    return render(request, 'dashboard/co_dashboard')
+    return display_co_pets(request) #render(request, 'dashboard/co_dashboard')
 
 
 def fo_dashboard(request):
@@ -117,3 +117,11 @@ def create_dog_profile(request):
         Dog.objects.create_pet_profile(owner, pet_name, description=description, profile_pic=profile_pic, age=age, sex=sex, size=size, good_w_kids=good_w_kids, spayed_or_neutered=spayed_or_neutered, rehoming_reason=rehoming_reason, breed=breed)
         return render(request, 'dashboard/co_dashboard.html')
     return render(request, 'pets/create_dog_profile.html', {'form': form})
+
+
+
+def display_co_pets(request):
+    owner = CurrentOwner.objects.get(user_id=request.user.user_id)
+    pets = owner.view_my_pets()
+    context = {'pets': pets}
+    return render(request, 'dashboard/co_dashboard.html', context)
