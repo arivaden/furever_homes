@@ -91,7 +91,7 @@ def create_cat_profile(request):
         good_w_kids = form.cleaned_data['good_w_kids']
         spayed_or_neutered = form.cleaned_data['spayed_or_neutered']
         rehoming_reason = form.cleaned_data['rehoming_reason']
-        owner = request.user.user_id
+        owner = CurrentOwner.objects.get(user_id=request.user.user_id)
         declawed = form.cleaned_data['is_declawed']
         Cat.objects.create_pet_profile(owner, pet_name, description=description, profile_pic=profile_pic, age=age,
                                        sex=sex, size=size, good_w_kids=good_w_kids,

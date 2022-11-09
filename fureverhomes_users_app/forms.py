@@ -22,7 +22,7 @@ class PetForm(forms.ModelForm):
 			'sex': _("Gender"),
 			'size': _("Size"),
 			'good_w_kids': _("Is the pet comfortable with children?"),
-			'spayed_or_neutered': _('Are they fixed?'),
+			'spayed_or_neutered': _('Are they spayed/neutered?'),
 			'rehoming_reason': _("Please give a little information about why you're rehoming your pet")
 
 			}
