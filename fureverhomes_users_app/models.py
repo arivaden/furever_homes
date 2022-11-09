@@ -165,7 +165,7 @@ class Report(models.Model):
 	report_id = models.AutoField(primary_key=True)
 	report_made_dt = models.DateTimeField
 	incident_dt = models.DateField
-	causes = ((1, 'Threatening Language'), (2, 'Demand of Payment'), (3, 'Other')) #complete later
+	causes = ((1, 'Threatening Language'), (2, 'Demand of Payment'), (3, 'Surrender of puppies under 8/kittens under 10 weeks'), (4, 'Other')) #complete later
 	report_cause = models.IntegerField(choices=causes)
 	report_images = models.ImageField(blank=True, upload_to='report_photos')
 	user_reported = models.ForeignKey(User, models.CASCADE, related_name='reported')
