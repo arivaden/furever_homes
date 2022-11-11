@@ -31,7 +31,7 @@ def dashboard(request):
     if isCo:
         return co_dashboard(request) #render(request, 'dashboard/co_dashboard.html')
     else:
-        return render(request, 'dashboard/fo_dashboard.html')
+        return fo_dashboard(request)#render(request, 'dashboard/fo_dashboard.html')
     #return render(request, 'dashboard/dashboard.html')
 
 

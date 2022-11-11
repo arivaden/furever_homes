@@ -10,6 +10,7 @@
     <div>
     {% if pets %}
         {% for i in pets %}
+        <img src={{i.profile_pic.url}} alt={{i.pet_name}}>
         <p>{{i.pet_name}}</p>
         {% endfor %}
     </div>
