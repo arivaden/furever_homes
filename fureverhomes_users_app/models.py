@@ -137,7 +137,7 @@ class CurrentOwner(User):
 
 	def view_my_pets(self):
 		co_pets = PetProfile.objects.filter(current_owner=self.user_id).exclude(is_adopted=True)
-		print("Got pets") #output line for testing purposes
+		print("Got pets of"+str(self.user_name)) #output line for testing purposes
 		return co_pets
 
 	def view_my_adopted_pets(self):
