@@ -7,12 +7,14 @@
 
 <div>
 <h2>Your Pets</h2>
+    <div>
     {% if pets %}
         {% for i in pets %}
         <p>{{i.pet_name}}</p>
         {% endfor %}
+    </div>
     {% else %}
-    <div class="col-md-12">
+    <div>
      <p>You do not currently have any pets</p>
    </div>
     {% endif %}
