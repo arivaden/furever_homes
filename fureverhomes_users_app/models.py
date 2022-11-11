@@ -137,6 +137,7 @@ class CurrentOwner(User):
 
 	def view_my_pets(self):
 		co_pets = PetProfile.objects.filter(current_owner=self.user_id).exclude(is_adopted=True)
+		print("Got pets") #output line for testing purposes
 		return co_pets
 
 	def view_my_adopted_pets(self):
@@ -192,8 +193,6 @@ class PetManager(models.Manager):
 		pet.save(using=self._db)
 		return pet
 
-
-
 class PetProfile(models.Model):
 	pet_profile_id = models.AutoField(primary_key=True)
 	pet_name = models.CharField(max_length=30)
@@ -213,6 +212,13 @@ class PetProfile(models.Model):
 	current_owner = models.ForeignKey(to=CurrentOwner, on_delete=models.CASCADE)
 	interested_users = models.ManyToManyField(FutureOwner)
 	objects = PetManager()
+
+	'''def get_pets(self):
+		if self.dog:
+			return self.dog
+		elif self.cat:
+		else:
+			raise RuntimeError("Unknown subclass")'''
 
 	class Meta:
 		ordering = ["date_uploaded"]
