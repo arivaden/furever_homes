@@ -11,9 +11,9 @@
     {% if pets %}
         {% for i in pets %}
             {% if i.profile_pic %}
-                <img src={{i.profile_pic.url}} alt={{i.pet_name}}>
+                <img src="{{i.profile_pic.url}}" alt="{{i.pet_name}}" width="500px" height="500px">
             {% else %}
-                <img src="paw.jpg" alt="No picture available">
+                <img src="paw.jpg" alt="No picture available" width="500px" height="500px">
             {% endif %}
         <p>{{i.pet_name}}</p>
         {% endfor %}
