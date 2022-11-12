@@ -5,6 +5,7 @@
     <h2>Create a profile for your pet here.</h2>
     <button type="submit" onclick="location.href = '{% url 'select_pet_type' %}'" value="submit" class="btn btn-success">Create Profile</button>
 
+<br>
 <div>
 <h2>Your Pets</h2>
     <div>
@@ -13,7 +14,7 @@
             {% if i.profile_pic %}
                 <img src="{{i.profile_pic.url}}" alt="{{i.pet_name}}" width="500px" height="500px">
             {% else %}
-                <img src="paw.jpg" alt="No picture available" width="500px" height="500px">
+                <img src="/paw.jpg" alt="No picture available" width="500px" height="500px">
             {% endif %}
         <p>{{i.pet_name}}</p>
         {% endfor %}
