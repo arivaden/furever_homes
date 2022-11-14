@@ -121,3 +121,7 @@ def create_dog_profile(request):
         Dog.objects.create_pet_profile(owner, pet_name, description=description, profile_pic=profile_pic, age=age, sex=sex, size=size, good_w_kids=good_w_kids, spayed_or_neutered=spayed_or_neutered, rehoming_reason=rehoming_reason, breed=breed)
         return render(request, 'dashboard/co_dashboard.html')
     return render(request, 'pets/create_dog_profile.html', {'form': form})
+
+def pet_profile(request, pet_profile_id):
+    pet = PetProfile.objects.get(pet_profile_id=pet_profile_id)
+    return render(request, 'pets/pet_profile.html', {pet:pet})

@@ -16,7 +16,8 @@
             {% else %}
                 <img src="paw.jpg" alt="No picture available" width="250px" height="250px">
             {% endif %}
-        <p>{{i.pet_name}}</p>
+        <a href="{% url 'pet_profile' i.pet_profile_id %}">{{i.pet_name}}</a>
+<br>
         {% endfor %}
     </div>
     {% else %}
