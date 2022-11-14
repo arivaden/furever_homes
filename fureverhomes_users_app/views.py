@@ -63,7 +63,6 @@ def create_fo_account(request):
 
 
 def co_dashboard(request):
-    print("looking for pets")
     owner = CurrentOwner.objects.get(user_id=request.user.user_id)
     pets = owner.view_my_pets()
     context = {'pets': pets}
