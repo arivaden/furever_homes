@@ -4,16 +4,25 @@
     <h1>Welcome to Furever Homes</h1>
     <h2>Create a profile for your pet here.</h2>
     <button type="submit" onclick="location.href = '{% url 'select_pet_type' %}'" value="submit" class="btn btn-success">Create Profile</button>
-{% endblock %}
+<br>
 <div>
 <h2>Your Pets</h2>
+    <div>
     {% if pets %}
         {% for i in pets %}
+            {% if i.profile_pic %}
+                <img src="{{i.profile_pic.url}}" alt="{{i.pet_name}}" width="500px" height="500px">
+            {% else %}
+                <img src="paw.jpg" alt="No picture available" width="500px" height="500px">
+            {% endif %}
         <p>{{i.pet_name}}</p>
         {% endfor %}
+    </div>
     {% else %}
-    <div class="col-md-12">
+    <div>
      <p>You do not currently have any pets</p>
    </div>
     {% endif %}
+    <h3> View Website Code of Conduct</h3>
+    {% endblock %}
 </div>
