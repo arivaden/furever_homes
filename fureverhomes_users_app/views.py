@@ -83,7 +83,7 @@ def select_pet_type(request):
     return render(request, 'pets/select_pet_type.html')
 
 def create_cat_profile(request):
-    form = CatForm(request.POST)
+    form = CatForm(request.POST, request.FILES)
     if form.is_valid():
         pet_name = form.cleaned_data['pet_name']
         description = form.cleaned_data['description']
@@ -104,17 +104,19 @@ def create_cat_profile(request):
     return render(request, 'pets/create_cat_profile.html', {'form': form})
 
 def create_dog_profile(request):
-    form = DogForm(request.POST)
+    form = DogForm(request.POST, request.FILES)
     if form.is_valid():
-        pet_name = form.cleaned_data['pet_name']
-        description = form.cleaned_data['description']
-        profile_pic = form.cleaned_data['profile_pic']
-        age = form.cleaned_data['age']
-        sex = form.cleaned_data['sex']
-        size = form.cleaned_data['size']
-        good_w_kids = form.cleaned_data['good_w_kids']
-        spayed_or_neutered = form.cleaned_data['spayed_or_neutered']
-        rehoming_reason = form.cleaned_data['rehoming_reason']
+        #form.save()
+        data = form.cleaned_data
+        pet_name = data['pet_name']
+        description = data['description']
+        profile_pic = data['profile_pic']
+        age = data['age']
+        sex = data['sex']
+        size = data['size']
+        good_w_kids = data['good_w_kids']
+        spayed_or_neutered = data['spayed_or_neutered']
+        rehoming_reason = data['rehoming_reason']
         owner = CurrentOwner.objects.get(user_id=request.user.user_id)
         breed = form.cleaned_data['breed']
         Dog.objects.create_pet_profile(owner, pet_name, description=description, profile_pic=profile_pic, age=age, sex=sex, size=size, good_w_kids=good_w_kids, spayed_or_neutered=spayed_or_neutered, rehoming_reason=rehoming_reason, breed=breed)
