@@ -66,11 +66,10 @@ def create_fo_account(request):
     return render(request, 'registration/create_fo_account.html', {'form': form})
 
 def co_dashboard(request):
-    print("looking for pets")
     owner = CurrentOwner.objects.get(user_id=request.user.user_id)
     pets = owner.view_my_pets()
     context = {'pets': pets}
-    return render(request, 'dashboard/co_dashboard.html', context) #render(request, 'dashboard/co_dashboard')
+    return render(request, 'dashboard/co_dashboard.html', context)
 
 
 def fo_dashboard(request):
