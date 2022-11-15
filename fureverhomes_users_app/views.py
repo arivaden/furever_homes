@@ -1,3 +1,4 @@
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from .forms import CreateCOAccount, CreateFOAccount, Login, DogForm, CatForm, PetType
 from .models import CurrentOwner, FutureOwner, PetProfile, Dog, Cat
@@ -8,7 +9,7 @@ def home(request):
     if request.method == "POST":
         if form.is_valid():
             form.save()
-            dashboard(request)
+            dashboard(request) #return HttpResponseRedirect('dashboard/dashboard.html')
     else:
         form = Login()
     return render(request, 'home_page.html', {'form': form})
@@ -21,14 +22,17 @@ def error(request):
 def dashboard(request):
     id = request.user.user_id
     isCo = True
+
     try:
         co = CurrentOwner.objects.get(user_id=id)
     except CurrentOwner.DoesNotExist:
         isCo = False
+
     if isCo:
-        return co_dashboard(request)
+        return co_dashboard(request) #render(request, 'dashboard/co_dashboard.html')
     else:
-        return fo_dashboard(request)
+        return fo_dashboard(request)#render(request, 'dashboard/fo_dashboard.html')
+    #return render(request, 'dashboard/dashboard.html')
 
 
 def select_account_type(request):
@@ -61,7 +65,6 @@ def create_fo_account(request):
         return render(request, 'dashboard/fo_dashboard.html')
     return render(request, 'registration/create_fo_account.html', {'form': form})
 
-
 def co_dashboard(request):
     owner = CurrentOwner.objects.get(user_id=request.user.user_id)
     pets = owner.view_my_pets()
@@ -77,7 +80,6 @@ def select_pet_type(request):
     # commenting this out until I can get it to work so we can dynamically load pet form into single html file
     #form = PetType(request.POST)
     return render(request, 'pets/select_pet_type.html')
-
 
 def create_cat_profile(request):
     form = CatForm(request.POST, request.FILES)
@@ -100,7 +102,6 @@ def create_cat_profile(request):
         return render(request, 'dashboard/co_dashboard.html')
     return render(request, 'pets/create_cat_profile.html', {'form': form})
 
-
 def create_dog_profile(request):
     form = DogForm(request.POST, request.FILES)
     if form.is_valid():
@@ -121,6 +122,6 @@ def create_dog_profile(request):
         return render(request, 'dashboard/co_dashboard.html')
     return render(request, 'pets/create_dog_profile.html', {'form': form})
 
-
 def pet_profile(request, pet_profile_id):
-    return render(request, 'pets/pet_profile.html')
+    pet = PetProfile.objects.get(pet_profile_id=pet_profile_id)
+    return render(request, 'pets/pet_profile.html', {pet: pet})
