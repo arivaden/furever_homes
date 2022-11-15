@@ -2,6 +2,6 @@
 <h3> {{pet.pet_name}} </h3>
 <img src="{{pet.profile_pic.url}}" alt="{{i.pet_name}}" width="250px" height="250px">
 <br>
-<p> Spayed/Neutered:{% if {{pet.spayed_neutered}} %} Yes {% else %} No {% endif %}</p>
+<p> Spayed/Neutered:{% if {{pet.spayed_or_neutered}} %} Yes {% else %} No {% endif %}</p>
 <p> Good With Kids:{% if {{pet.good_w_kids}} %} Yes {% else %} No {% endif %}</p>
 <p> {{pet.description}}</p>
