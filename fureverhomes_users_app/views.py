@@ -123,5 +123,30 @@ def create_dog_profile(request):
     return render(request, 'pets/create_dog_profile.html', {'form': form})
 
 def pet_profile(request, pet_profile_id):
-    pet = PetProfile.objects.get(pet_profile_id=pet_profile_id)
-    return render(request, 'pets/pet_profile.html', {pet: pet})
+    pet_model = PetProfile.objects.get(pet_profile_id=pet_profile_id)
+    fixed = pet_model.spayed_or_neutered
+    good_w_kids = pet_model.good_w_kids
+    age_choices = {0:'Young: 0-1 Years', 1:"Adult: 1-6 Years", 2:"Senior: 6+ Years"}
+    size_choices = {1:"Small", 2:"Medium", 3:"Large"}
+    sex_choices = {'M':'Male', 'F':'Female', 'U':'Unknown'}
+    y = "Yes"
+    n = "No"
+    spayed_neutered = n
+    kids = n
+    if fixed:
+        spayed_neutered = y
+    if good_w_kids:
+        kids = y
+    pet = {
+        "pet_name" : pet_model.pet_name,
+        "size" : size_choices.get(pet_model.size),
+        "sex" : sex_choices.get(pet_model.sex),
+            "spayed_or_neutered" : spayed_neutered,
+           "good_w_kids" : kids,
+           "age": age_choices.get(pet_model.age),
+           "profile_pic": pet_model.profile_pic,
+           "description": pet_model.description,
+            "rehoming_reason" : pet_model.rehoming_reason
+
+    }
+    return render(request, 'pets/pet_profile.html', {'pet': pet})
