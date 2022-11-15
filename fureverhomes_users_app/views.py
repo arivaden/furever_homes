@@ -124,4 +124,4 @@ def create_dog_profile(request):
 
 def pet_profile(request, pet_profile_id):
     pet = PetProfile.objects.get(pet_profile_id=pet_profile_id)
-    return render(request, 'pets/pet_profile.html', {pet:pet})
+    return render(request, 'pets/pet_profile.html', {pet: pet})
