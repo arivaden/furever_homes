@@ -193,6 +193,7 @@ class PetManager(models.Manager):
 		pet.save(using=self._db)
 		return pet
 
+
 class PetProfile(models.Model):
 	pet_profile_id = models.AutoField(primary_key=True)
 	pet_name = models.CharField(max_length=30)

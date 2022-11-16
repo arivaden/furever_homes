@@ -19,4 +19,5 @@ urlpatterns = [
     path('create_dog_profile/', views.create_dog_profile, name="create_dog_profile"),
     path('create_cat_profile/', views.create_cat_profile, name="create_cat_profile"),
     path('pet_profile/<int:pet_profile_id>', views.pet_profile, name='pet_profile'),
+    path('code_of_conduct', views.code_of_conduct, name='code_of_conduct'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
