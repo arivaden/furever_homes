@@ -1,7 +1,9 @@
 {% extends "base.html" %}
 <h3> {{pet.pet_name}} </h3>
+<p> {{pet.sex}} {{pet.age}} {{pet.size}}</p>
 <img src="{{pet.profile_pic.url}}" alt="{{i.pet_name}}" width="250px" height="250px">
 <br>
-<p> Spayed/Neutered:{% if {{pet.spayed_or_neutered}} %} Yes {% else %} No {% endif %}</p>
-<p> Good With Kids:{% if {{pet.good_w_kids}} %} Yes {% else %} No {% endif %}</p>
+<p> Spayed/Neutered:{{pet.spayed_or_neutered}}</p>
+<p> Good With Kids:{{pet.good_w_kids}}</p>
 <p> {{pet.description}}</p>
+<p> {{pet.rehoming_reason}} </p>
