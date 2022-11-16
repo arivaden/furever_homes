@@ -1,0 +1,8 @@
+{% if user.is_authenticated %}
+    {% include "base.html" %}
+{% else %}
+    {% include "no_auth_base.html" %}
+{% endif %}
+{% block content %}
+    <h2>Furever Homes Code of Conduct</h2>
+{% endblock %}
