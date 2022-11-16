@@ -99,7 +99,7 @@ def create_cat_profile(request):
                                        sex=sex, size=size, good_w_kids=good_w_kids,
                                        spayed_or_neutered=spayed_or_neutered, rehoming_reason=rehoming_reason,
                                        is_declawed=declawed)
-        return render(request, 'dashboard/co_dashboard.html')
+        co_dashboard(request) #return render(request, 'dashboard/co_dashboard.html')
     return render(request, 'pets/create_cat_profile.html', {'form': form})
 
 def create_dog_profile(request):
@@ -119,7 +119,7 @@ def create_dog_profile(request):
         owner = CurrentOwner.objects.get(user_id=request.user.user_id)
         breed = form.cleaned_data['breed']
         Dog.objects.create_pet_profile(owner, pet_name, description=description, profile_pic=profile_pic, age=age, sex=sex, size=size, good_w_kids=good_w_kids, spayed_or_neutered=spayed_or_neutered, rehoming_reason=rehoming_reason, breed=breed)
-        return render(request, 'dashboard/co_dashboard.html')
+        co_dashboard(request) #return render(request, 'dashboard/co_dashboard.html')
     return render(request, 'pets/create_dog_profile.html', {'form': form})
 
 def pet_profile(request, pet_profile_id):
@@ -150,3 +150,9 @@ def pet_profile(request, pet_profile_id):
 
     }
     return render(request, 'pets/pet_profile.html', {'pet': pet})
+
+def edit_pet_profile(request, pet_id):
+    pet = PetProfile.objects.get(pet_profile_id = pet_id)
+
+    pet.edit_pet_profile()
+    return(request, )
