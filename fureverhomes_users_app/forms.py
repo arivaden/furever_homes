@@ -4,6 +4,7 @@ from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.forms import UserCreationForm
 
 # do not delete, want to try and get this to work with dynamically generating forms
+
 class PetType(forms.Form):
 	pets = [('d','Dog'), ('c',"Cat")]
 	pet_type = forms.RadioSelect(choices=pets)
@@ -40,13 +41,14 @@ class DogForm(PetForm):
 		model = Dog
 		fields = ['pet_name', 'description', 'profile_pic', 'age',
 				  'sex', 'size', 'good_w_kids', 'spayed_or_neutered', 'rehoming_reason', 'breed']
+		labels = {'breed':_("Breed")}
 
 class CatForm(PetForm):
 	class Meta(PetForm.Meta):
 		model = Cat
 		fields = ['pet_name', 'description', 'profile_pic', 'age',
 				  'sex', 'size', 'good_w_kids', 'spayed_or_neutered', 'rehoming_reason', 'is_declawed']
-
+		labels = {'is_declawed': _("Is your cat declawed?")}
 
 class getUserProfile(forms.Form):
 
