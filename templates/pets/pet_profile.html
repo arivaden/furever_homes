@@ -16,4 +16,8 @@
                 <div> {{pet.rehoming_reason}} </div>
             </div>
 </div>
+{% if editor %}
+    <button type="submit" class="btn btn-success">Edit Pet Profile</button>
+    <a href="{% url delete_pet pet.pet_profile_id %}" >Delete Pet Profile</a>
+{% endif %}
 {% endblock %}

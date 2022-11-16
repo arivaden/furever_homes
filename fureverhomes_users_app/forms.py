@@ -41,7 +41,7 @@ class DogForm(PetForm):
 		model = Dog
 		fields = ['pet_name', 'description', 'profile_pic', 'age',
 				  'sex', 'size', 'good_w_kids', 'spayed_or_neutered', 'rehoming_reason', 'breed']
-		labels = {'breed':_("Breed")}
+		labels = {'breed': _("Breed")}
 
 class CatForm(PetForm):
 	class Meta(PetForm.Meta):

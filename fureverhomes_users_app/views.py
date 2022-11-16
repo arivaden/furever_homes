@@ -132,6 +132,10 @@ def create_dog_profile(request):
 
 def pet_profile(request, pet_profile_id):
     pet_model = PetProfile.objects.get(pet_profile_id=pet_profile_id)
+    editor = False
+    id = request.user.user_id
+    if id == pet_model.current_owner.user_id:
+        editor = True
     fixed = pet_model.spayed_or_neutered
     good_w_kids = pet_model.good_w_kids
     age_choices = {0:'Young: 0-1 Years', 1:"Adult: 1-6 Years", 2:"Senior: 6+ Years"}
@@ -157,10 +161,15 @@ def pet_profile(request, pet_profile_id):
             "rehoming_reason" : pet_model.rehoming_reason
 
     }
-    return render(request, 'pets/pet_profile.html', {'pet': pet})
+    return render(request, 'pets/pet_profile.html', {'pet': pet, 'editor':editor})
 
 def edit_pet_profile(request, pet_id):
     pet = PetProfile.objects.get(pet_profile_id = pet_id)
 
     pet.edit_pet_profile()
     return(request, )
+
+def delete_pet_profile(pet_id):
+    pet = PetProfile.objects.get(pet_profile_id = pet_id)
+    pet.objects.delete()
+    return redirect('co_dashboard')
