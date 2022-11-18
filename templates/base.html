@@ -10,8 +10,16 @@
     <div id="content" name="content" class="main">
         <div class="row justify-content-center">
             <div class="col-8">
-                <h1 class="mt-2">Furever Homes</h1>
-                <hr class="mt-0 mb-4">
+                <div style="font-size:2.5rem">
+                    <img src="/media/home_icon.svg" alt="home icon" style="width: 30px" onclick="location.href = '{% url 'dashboard' %}'">
+                    Furever Homes
+                </div>
+                <div>
+                    <a href="{% url 'code_of_conduct' %}">Code of Conduct</a>
+                     &#x2022;
+                    <a href="{% url 'logout' %}">Log Out</a>
+                </div>
+                <hr>
                 {% block content %}
                 {% endblock %}
             </div>

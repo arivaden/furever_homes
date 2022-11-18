@@ -1,5 +1,5 @@
 from django.http import HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .forms import CreateCOAccount, CreateFOAccount, Login, DogForm, CatForm, PetType
 from .models import CurrentOwner, FutureOwner, PetProfile, Dog, Cat
 
@@ -65,6 +65,7 @@ def create_fo_account(request):
         return render(request, 'dashboard/fo_dashboard.html')
     return render(request, 'registration/create_fo_account.html', {'form': form})
 
+
 def co_dashboard(request):
     owner = CurrentOwner.objects.get(user_id=request.user.user_id)
     pets = owner.view_my_pets()
@@ -80,6 +81,7 @@ def select_pet_type(request):
     # commenting this out until I can get it to work so we can dynamically load pet form into single html file
     #form = PetType(request.POST)
     return render(request, 'pets/select_pet_type.html')
+
 
 def create_cat_profile(request):
     form = CatForm(request.POST, request.FILES)
@@ -99,8 +101,13 @@ def create_cat_profile(request):
                                        sex=sex, size=size, good_w_kids=good_w_kids,
                                        spayed_or_neutered=spayed_or_neutered, rehoming_reason=rehoming_reason,
                                        is_declawed=declawed)
-        return render(request, 'dashboard/co_dashboard.html')
+        return redirect('co_dashboard') #return render(request, 'dashboard/co_dashboard.html')
     return render(request, 'pets/create_cat_profile.html', {'form': form})
+
+
+def code_of_conduct(request):
+    return render(request, 'registration/code_of_conduct.html')
+
 
 def create_dog_profile(request):
     form = DogForm(request.POST, request.FILES)
@@ -119,9 +126,50 @@ def create_dog_profile(request):
         owner = CurrentOwner.objects.get(user_id=request.user.user_id)
         breed = form.cleaned_data['breed']
         Dog.objects.create_pet_profile(owner, pet_name, description=description, profile_pic=profile_pic, age=age, sex=sex, size=size, good_w_kids=good_w_kids, spayed_or_neutered=spayed_or_neutered, rehoming_reason=rehoming_reason, breed=breed)
-        return render(request, 'dashboard/co_dashboard.html')
+        return redirect('co_dashboard') #return render(request, 'dashboard/co_dashboard.html')
     return render(request, 'pets/create_dog_profile.html', {'form': form})
 
+
 def pet_profile(request, pet_profile_id):
-    pet = PetProfile.objects.get(pet_profile_id=pet_profile_id)
-    return render(request, 'pets/pet_profile.html', {pet:pet})
+    pet_model = PetProfile.objects.get(pet_profile_id=pet_profile_id)
+    editor = False
+    id = request.user.user_id
+    if id == pet_model.current_owner.user_id:
+        editor = True
+    fixed = pet_model.spayed_or_neutered
+    good_w_kids = pet_model.good_w_kids
+    age_choices = {0:'Young: 0-1 Years', 1:"Adult: 1-6 Years", 2:"Senior: 6+ Years"}
+    size_choices = {1:"Small", 2:"Medium", 3:"Large"}
+    sex_choices = {'M':'Male', 'F':'Female', 'U':'Unknown'}
+    y = "Yes"
+    n = "No"
+    spayed_neutered = n
+    kids = n
+    if fixed:
+        spayed_neutered = y
+    if good_w_kids:
+        kids = y
+    pet = {
+        "pet_name" : pet_model.pet_name,
+        "size" : size_choices.get(pet_model.size),
+        "sex" : sex_choices.get(pet_model.sex),
+            "spayed_or_neutered" : spayed_neutered,
+           "good_w_kids" : kids,
+           "age": age_choices.get(pet_model.age),
+           "profile_pic": pet_model.profile_pic,
+           "description": pet_model.description,
+            "rehoming_reason" : pet_model.rehoming_reason
+
+    }
+    return render(request, 'pets/pet_profile.html', {'pet': pet, 'editor':editor})
+
+def edit_pet_profile(request, pet_id):
+    pet = PetProfile.objects.get(pet_profile_id = pet_id)
+
+    pet.edit_pet_profile()
+    return(request, )
+
+def delete_pet_profile(pet_id):
+    pet = PetProfile.objects.get(pet_profile_id = pet_id)
+    pet.objects.delete()
+    return redirect('co_dashboard')

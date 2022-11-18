@@ -81,9 +81,10 @@ WSGI_APPLICATION = 'local_fureverhomes.wsgi.application'
 DATABASES = {
    'default': {
        'ENGINE': 'django.db.backends.mysql',
-       'NAME': 'fureverhomes_db',
-       'USER': 'madison',
-       #'USER': 'localuser',
+       #'NAME': 'fureverhomes_db',
+       'NAME': 'sys',
+       #'USER': 'madison',
+       'USER': 'root',
        'PASSWORD': 'databaseforpets',
        'HOST': 'localhost',
        'PORT': '3306',

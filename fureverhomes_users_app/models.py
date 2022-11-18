@@ -193,6 +193,7 @@ class PetManager(models.Manager):
 		pet.save(using=self._db)
 		return pet
 
+
 class PetProfile(models.Model):
 	pet_profile_id = models.AutoField(primary_key=True)
 	pet_name = models.CharField(max_length=30)
@@ -213,6 +214,26 @@ class PetProfile(models.Model):
 	interested_users = models.ManyToManyField(FutureOwner)
 	objects = PetManager()
 
+	def edit_pet_profile(self, pet_name=None, description=None, profile_pic=None, spayed_neutered=None, sex=None, size=None, rehoming_reason=None):
+		if pet_name is not None:
+			self.pet_name = pet_name
+		if description is not None:
+			self.description = description
+		if profile_pic is not None:
+			self.profile_pic = profile_pic
+		if spayed_neutered is not None:
+			self.spayed_or_neutered = spayed_neutered
+		if sex is not None:
+			self.sex = sex
+		if size is not None:
+			self.size = size
+		if rehoming_reason is not None:
+			self.rehoming_reason = rehoming_reason
+		self.save()
+
+	def mark_as_adopted(self):
+		self.is_adopted = True
+		self.save()
 	'''def get_pets(self):
 		if self.dog:
 			return self.dog
