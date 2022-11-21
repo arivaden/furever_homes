@@ -163,13 +163,13 @@ def pet_profile(request, pet_profile_id):
     }
     return render(request, 'pets/pet_profile.html', {'pet': pet, 'editor':editor})
 
-def edit_pet_profile(request, pet_id):
-    pet = PetProfile.objects.get(pet_profile_id = pet_id)
+def edit_pet_profile(request, pet_profile_id):
+    pet = PetProfile.objects.get(pet_profile_id = pet_profile_id)
 
     pet.edit_pet_profile()
     return(request, )
 
-def delete_pet_profile(pet_id):
-    pet = PetProfile.objects.get(pet_profile_id = pet_id)
+def delete_pet_profile(pet_profile_id):
+    pet = PetProfile.objects.get(pet_profile_id = pet_profile_id)
     pet.objects.delete()
     return redirect('co_dashboard')

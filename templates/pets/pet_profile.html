@@ -17,7 +17,6 @@
             </div>
 </div>
 {% if editor %}
-    <button type="submit" class="btn btn-success">Edit Pet Profile</button>
-    <a >Delete Pet Profile</a>
+<a href="{% url delete_pet_profile pet.pet_profile_id %}"> Delete Pet Profile</a>
 {% endif %}
 {% endblock %}
