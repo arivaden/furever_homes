@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="29128c9a-ceba-4768-959a-6f4331d64480" name="Changes" comment="add pet_profile pages reformat co dashboard" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="HTML File" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="2G2hJPQKBobbdwYVCAg5id0bMz0" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
+    <property name="DefaultHtmlFileTemplate" value="HTML File" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/templates/dashboard" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+    <property name="vue.rearranger.settings.migration" value="true" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\AvaRi\PycharmProjects\furever_homes\templates\dashboard" />
+      <recent name="C:\Users\AvaRi\PycharmProjects\furever_homes\fureverhomes_users_app\static\admin\css" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\AvaRi\PycharmProjects\furever_homes\media" />
+      <recent name="C:\Users\AvaRi\PycharmProjects\furever_homes\media\pet_profile_photos" />
+      <recent name="C:\Users\AvaRi\PycharmProjects\furever_homes\templates" />
+      <recent name="C:\Users\AvaRi\PycharmProjects\furever_homes" />
+      <recent name="C:\Users\AvaRi\PycharmProjects\furever_homes\templates\dashboard" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="settings" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="furever_homes" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/local_fureverhomes" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/local_fureverhomes/settings.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="29128c9a-ceba-4768-959a-6f4331d64480" name="Changes" comment="" />
+      <created>1665592517008</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1665592517008</updated>
+      <workItem from="1668451458650" duration="26000" />
+    </task>
+    <task id="LOCAL-00001" summary="forms attempt 1">
+      <created>1666036328241</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1666036328241</updated>
+    </task>
+    <task id="LOCAL-00002" summary="forms attempt 1">
+      <created>1666036463833</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1666036463833</updated>
+    </task>
+    <task id="LOCAL-00003" summary="working forms: create account, login, bootstrap styling">
+      <created>1666462192992</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1666462192992</updated>
+    </task>
+    <task id="LOCAL-00004" summary="currentowner/futureowner able to be created and login">
+      <created>1666802792154</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1666802792154</updated>
+    </task>
+    <task id="LOCAL-00005" summary="remove create_pet_profile url from CO dashboard">
+      <created>1666903662130</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1666903662130</updated>
+    </task>
+    <task id="LOCAL-00006" summary="remove typo from co_dashboard">
+      <created>1666903770499</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1666903770499</updated>
+    </task>
+    <task id="LOCAL-00007" summary="add pet_profile pages reformat co dashboard">
+      <created>1668447310356</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1668447310356</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="forms attempt 1" />
+    <MESSAGE value="working forms: create account, login, bootstrap styling" />
+    <MESSAGE value="currentowner/futureowner able to be created and login" />
+    <MESSAGE value="remove create_pet_profile url from CO dashboard" />
+    <MESSAGE value="remove typo from co_dashboard" />
+    <MESSAGE value="add pet_profile pages reformat co dashboard" />
+    <option name="LAST_COMMIT_MESSAGE" value="add pet_profile pages reformat co dashboard" />
+  </component>
+</project>

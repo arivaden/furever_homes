@@ -1,0 +1,384 @@
+Index: templates/dashboard/dashboard.html
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>{% extends \"base.html\" %}\r\n{% load crispy_forms_tags %}\r\n{% block content %}\r\n    {% if user.is_authenticated %}\r\n    <h1>Welcome to Furever Homes</h1>\r\n    <p><a href=\"{% url 'logout' %}\">Log Out</a></p>\r\n    {% else %}\r\n    <p> You are not logged in</p>\r\n<p><a href=\"{% url 'home' %}\"> Login Here</a></p>\r\n    {% endif %}\r\n{% endblock %}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/templates/dashboard/dashboard.html b/templates/dashboard/dashboard.html
+--- a/templates/dashboard/dashboard.html	(revision ada7304576845a14540bdd6ea61cfd88cef538ca)
++++ b/templates/dashboard/dashboard.html	(date 1668551676183)
+@@ -1,11 +1,12 @@
+-{% extends "base.html" %}
+ {% load crispy_forms_tags %}
+ {% block content %}
+     {% if user.is_authenticated %}
+-    <h1>Welcome to Furever Homes</h1>
+-    <p><a href="{% url 'logout' %}">Log Out</a></p>
++        <h1>Welcome to Furever Homes</h1>
++        {% include "base.html" %}
++        <p><a href="{% url 'logout' %}">Log Out</a></p>
+     {% else %}
+-    <p> You are not logged in</p>
+-<p><a href="{% url 'home' %}"> Login Here</a></p>
++        {% include "no_auth_base.html" %}
++        <p> You are not logged in</p>
++        <p><a href="{% url 'home' %}"> Login Here</a></p>
+     {% endif %}
+ {% endblock %}
+Index: templates/registration/login.html
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>{% extends \"base.html\" %}\r\n{% block content %}\r\n    <h2>Log In</h2>\r\n    <div class=\"form-group\">\r\n    <form method=\"post\">\r\n    {% csrf_token %}\r\n    {{ form.as_div }}\r\n            <p>Don't have an account? Create one <a href=\"{% url 'select_account_type' %}\">here.</a></p>\r\n            <button type=\"submit\" class=\"btn btn-success\">Log In</button>\r\n        </form>\r\n    </div>\r\n{% endblock %}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/templates/registration/login.html b/templates/registration/login.html
+--- a/templates/registration/login.html	(revision ada7304576845a14540bdd6ea61cfd88cef538ca)
++++ b/templates/registration/login.html	(date 1668551676190)
+@@ -1,4 +1,4 @@
+-{% extends "base.html" %}
++{% extends "no_auth_base.html" %}
+ {% block content %}
+     <h2>Log In</h2>
+     <div class="form-group">
+Index: templates/registration/create_fo_account.html
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>{% extends \"base.html\" %}\r\n{% load crispy_forms_tags %}\r\n{% block content %}\r\n    <h1>Looking to adopt a pet? Create an account here:</h1>\r\n    <form action=\"\" method=\"post\" enctype=\"multipart/form-data\">\r\n        {{ form|crispy }}\r\n        {% csrf_token %}\r\n        <button type=\"submit\" class=\"btn btn-success\">Create account</button>\r\n    </form>\r\n{% endblock %}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/templates/registration/create_fo_account.html b/templates/registration/create_fo_account.html
+--- a/templates/registration/create_fo_account.html	(revision ada7304576845a14540bdd6ea61cfd88cef538ca)
++++ b/templates/registration/create_fo_account.html	(date 1668551676197)
+@@ -1,4 +1,4 @@
+-{% extends "base.html" %}
++{% extends "no_auth_base.html" %}
+ {% load crispy_forms_tags %}
+ {% block content %}
+     <h1>Looking to adopt a pet? Create an account here:</h1>
+Index: fureverhomes_users_app/models.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import django\r\nimport os\r\nfrom django.db import models\r\n#from django.conf import settings\r\n#settings.configure()\r\nfrom django.contrib.auth.models import AbstractBaseUser, BaseUserManager\r\nfrom django.contrib.auth.models import PermissionsMixin\r\nfrom django.core import validators\r\n\r\n\r\nclass UserManager(BaseUserManager):\r\n\tuse_in_migrations = True\r\n\r\n\tdef save_user(self, email, password, user_dob, user_zip, **extra_fields):\r\n\t\t#Creates and saves a User with the given email and password.\r\n\t\tif not email:\r\n\t\t\traise ValueError('The given email must be set')\r\n\t\tif not password:\r\n\t\t\traise ValueError('You must create a password')\r\n\r\n\t\temail = self.normalize_email(email)\r\n\t\tuser = self.model(\r\n\t\t\tuser_email=email,\r\n\t\t\t**extra_fields)\r\n\r\n\t\t# Call this method for password hashing\r\n\t\tuser.set_password(password)\r\n\t\tuser.save(using=self._db)\r\n\t\treturn user\r\n\r\n\tdef create_user(self, email, password=None, user_dob=None, user_zip=None, **extra_fields):\r\n\t\textra_fields['is_superuser'] = False\r\n\t\textra_fields['is_staff'] = False\r\n\t\treturn self.save_user(email, password, user_dob, user_zip, **extra_fields)\r\n\r\n\t# Method called while creating a staff user\r\n\tdef create_staffuser(self, email, password, **extra_fields):\r\n\t\textra_fields['is_staff'] = True\r\n\t\textra_fields['is_superuser'] = False\r\n\r\n\t\treturn self.save_user(email, password, **extra_fields)\r\n\r\n\t# Method called while calling creatsuperuser\r\n\tdef create_superuser(self, email, password, **extra_fields):\r\n\r\n\t\t# Set is_superuser parameter to true\r\n\t\textra_fields.setdefault('is_superuser', True)\r\n\r\n\t\tif extra_fields.get('is_superuser') is not True:\r\n\t\t\traise ValueError('is_superuser should be True')\r\n\r\n\t\textra_fields['is_staff'] = True\r\n\r\n\t\treturn self.save_user(email, password, **extra_fields)\r\n\r\n\r\nclass User(AbstractBaseUser, PermissionsMixin):\r\n\tuser_id = models.BigAutoField(primary_key=True)\r\n\tuser_email = models.CharField(default=\"youremail@example.com\", unique=True, blank=False, max_length=30, validators=[validators.EmailValidator()])\r\n\tuser_name = models.CharField(max_length=50, blank=False, default=\"YourName\")\r\n\tuser_dob = models.DateField(blank=False, default='1999-01-01')\r\n\tuser_zip = models.CharField( default=10000, blank=False, max_length=5, validators=[validators.RegexValidator(r'^\\d{1,10}$')])\r\n\tis_staff = models.BooleanField(default=False)\r\n\tis_active = models.BooleanField(default=True)  # used for blocking, will be set false by moderator\r\n\tUSERNAME_FIELD = 'user_email'\r\n\tobjects = UserManager()\r\n\r\n\tdef getName(self):\r\n\t\treturn self.user_name\r\n\r\n\r\n#these are subclasses of User\r\nclass FutureOwner(User):\r\n\tfo_id = User.user_id\r\n\tpet_type = [('dog', 'Dog'), ('cat', 'Cat')]\r\n\tpet_sex = [('M', \"Male\"), ('F', 'Female'), ('N',\"No Preference\")]\r\n\tpet_age = [(0, 'Young'), (1, \"Adult\"), (2, \"Senior\")]\r\n\tgood_w_kids = [(0, 'Must be good with kids'), (1, \"Doesn't need to be good with kids\")]\r\n\tspayed_or_neutered = [(0, 'Must be spayed/neutered'), (1, \"Doesn't need to be spayed/neutered\")]\r\n\tsize = [(1, \"Small\"), (2, \"Medium\"), (3, \"Large\"), (4, \"No Preference\")]\r\n\tsize_pref = models.IntegerField(default=4, choices=size)\r\n\ttype_pref = models.TextField(default='dog', max_length=5, choices=pet_type)\r\n\tsex_pref = models.CharField(default='N', max_length=3, choices=pet_sex)\r\n\tage_pref = models.IntegerField(default=0, choices=pet_age)\r\n\tkids_pref = models.IntegerField(default=0, choices=good_w_kids)\r\n\tfixed_pref = models.IntegerField(default=0, choices=spayed_or_neutered)\r\n\r\n\t# user can input preferences specific for dogs/cats\r\n\tdef specific_preferences(self):\r\n\t\tpass\r\n\r\n\t# returns QuerySet of pet profiles based on User's preferences\r\n\tdef find_pets(self):\r\n\t\t#Determine pet type\r\n\t\tif self.type_pref == 'dog':\r\n\t\t\tpet_pool = Dog.objects.filter(age=self.age_pref).exclude(is_adopted=True)\r\n\t\telse:\r\n\t\t\tpet_pool = Cat.objects.filter(age=self.age_pref).exclude(is_adopted=True)\r\n\r\n\t\t#filter with extra criteria\r\n\t\tif self.sex_pref == 'M' or self.sex_pref == 'F':\r\n\t\t\tpet_pool = pet_pool.filter(sex=self.sex_pref)\r\n\t\tif self.kids_pref == 0:\r\n\t\t\tpet_pool = pet_pool.filter(good_w_kids=True)\r\n\t\tif self.fixed_pref == 0:\r\n\t\t\tpet_pool = pet_pool.filter(spayed_or_neutered=True)\r\n\t\tif self.size_pref != 4:\r\n\t\t\tpet_pool = pet_pool.filter(size = self.size_pref)\r\n\r\n\t\treturn pet_pool\r\n\r\n\t# allows user to change preferences, must specify name of field being updated\r\n\tdef edit_preferences(self, type_pref=None, size_pref=None, age_pref=None, sex_pref=None, kids_pref=None, fixed_pref=None):\r\n\t\tif type_pref is not None:\r\n\t\t\tself.type_pref = type_pref\r\n\t\tif size_pref is not None:\r\n\t\t\tself.size_pref = size_pref\r\n\t\tif age_pref is not None:\r\n\t\t\tself.age_pref = age_pref\r\n\t\tif sex_pref is not None:\r\n\t\t\tself.sex_pref = sex_pref\r\n\t\tif kids_pref is not None:\r\n\t\t\tself.kids_pref = kids_pref\r\n\t\tif fixed_pref is not None:\r\n\t\t\tself.fixed_pref = fixed_pref\r\n\t\tself.save()\r\n\r\n\tdef to_CO(self):\r\n\t\tnew_co = CurrentOwner.objects.create_user(email=self.user_email, password=self.password, user_dob=self.user_dob, user_zip=self.user_zip)\r\n\t\tnew_co.user_id = self.user_id\r\n\t\tnew_co.user_name = self.user_name\r\n\t\tnew_co.save()\r\n\t\tself.delete()\r\n\r\nclass CurrentOwner(User):\r\n\tco_id = User.user_id\r\n\r\n\tdef view_my_pets(self):\r\n\t\tco_pets = PetProfile.objects.filter(current_owner=self.user_id).exclude(is_adopted=True)\r\n\t\tprint(\"Got pets of\"+str(self.user_name)) #output line for testing purposes\r\n\t\treturn co_pets\r\n\r\n\tdef view_my_adopted_pets(self):\r\n\t\tco_pets = PetProfile.objects.filter(current_owner=self.user_id, is_adopted=True)\r\n\t\treturn co_pets\r\n\r\n\tdef to_FO(self):\r\n\t\tif len(self.view_my_pets()) == 0:\r\n\t\t\tnew_fo = FutureOwner.objects.create_user(email=self.user_email, password=self.password, user_dob=self.user_dob, user_zip=self.user_zip)\r\n\t\t\tnew_fo.user_id = self.user_id\r\n\t\t\tnew_fo.user_name = self.user_name\r\n\t\t\tnew_fo.save()\r\n\t\t\tself.delete()\r\n\t\telse:\r\n\t\t\traise Exception(\"Cannot adopt a pet while you still have pets up for adoption.\")\r\n\r\n#moderator can block other users\r\nclass Moderator(User):\r\n\tmod_id = User.user_id\r\n\r\n\tdef block_user(self, user_to_block):\r\n\t\tuser_to_block.is_active = False\r\n\r\n\r\nclass Report(models.Model):\r\n\treport_id = models.AutoField(primary_key=True)\r\n\treport_made_dt = models.DateTimeField\r\n\tincident_dt = models.DateField\r\n\tcauses = ((1, 'Threatening Language'), (2, 'Demand of Payment'), (3, 'Surrender of puppies under 8/kittens under 10 weeks'), (4, 'Other')) #complete later\r\n\treport_cause = models.IntegerField(choices=causes)\r\n\treport_images = models.ImageField(blank=True, upload_to='report_photos')\r\n\tuser_reported = models.ForeignKey(User, models.CASCADE, related_name='reported')\r\n\tuser_reporter = models.ForeignKey(User, on_delete=models.CASCADE, related_name='reporter')\r\n\tmoderator_assigned = models.ForeignKey(Moderator, on_delete=models.PROTECT)\r\n\r\n\r\nclass Message(models.Model):\r\n\tmessage_id = models.BigAutoField(primary_key = True)\r\n\tmessage_dt = models.DateTimeField\r\n\tmessage_content = models.CharField(max_length=1000)\r\n\treceiver_id = models.ForeignKey(User, models.CASCADE, related_name='receiver')\r\n\tsender_id = models.ForeignKey(User, models.CASCADE, related_name='sender')\r\n\r\n\r\nclass PetManager(models.Manager):\r\n\r\n\tdef create_pet_profile(self, co, pet_name, **extra_fields):\r\n\t\textra_fields['is_adopted'] = False\r\n\t\t#date will automatically be added, like id\r\n\t\tif not pet_name:\r\n\t\t\traise ValueError('You must give the name of your pet')\r\n\t\tpet = self.model(pet_name=pet_name, current_owner=co, **extra_fields)\r\n\t\tpet.save(using=self._db)\r\n\t\treturn pet\r\n\r\nclass PetProfile(models.Model):\r\n\tpet_profile_id = models.AutoField(primary_key=True)\r\n\tpet_name = models.CharField(max_length=30)\r\n\tdescription = models.CharField(max_length=300)\r\n\tprofile_pic = models.ImageField(blank=True, upload_to='pet_profile_photos')\r\n\tage_choices = [(0, 'Young: 0-1 Years'), (1, \"Adult: 1-6 Years\"), (2, \"Senior: 6+ Years\")]\r\n\tage = models.IntegerField(choices=age_choices, default=0)\r\n\tsexes = (('M', 'Male'), ('F', 'Female'), ('U', 'Unsure'))\r\n\tsex = models.CharField(max_length=1, choices=sexes, default='U')\r\n\tsize_choices = ((1, \"Small\"), (2, \"Medium\"), (3, \"Large\"))\r\n\tsize = models.IntegerField(choices=size_choices, default=2)\r\n\tgood_w_kids = models.BooleanField(default=False)\r\n\tspayed_or_neutered = models.BooleanField(default=False)\r\n\trehoming_reason = models.CharField(max_length=200)\r\n\tdate_uploaded = models.DateField(auto_now_add=True)\r\n\tis_adopted = models.BooleanField(default=False)\r\n\tcurrent_owner = models.ForeignKey(to=CurrentOwner, on_delete=models.CASCADE)\r\n\tinterested_users = models.ManyToManyField(FutureOwner)\r\n\tobjects = PetManager()\r\n\r\n\t'''def get_pets(self):\r\n\t\tif self.dog:\r\n\t\t\treturn self.dog\r\n\t\telif self.cat:\r\n\t\telse:\r\n\t\t\traise RuntimeError(\"Unknown subclass\")'''\r\n\r\n\tclass Meta:\r\n\t\tordering = [\"date_uploaded\"]\r\n\r\n\r\nclass Dog(PetProfile):\r\n\tbreed = models.CharField(max_length=20)\r\n\r\n\r\nclass Cat(PetProfile):\r\n\tis_declawed = models.BooleanField(default=False)\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/fureverhomes_users_app/models.py b/fureverhomes_users_app/models.py
+--- a/fureverhomes_users_app/models.py	(revision ada7304576845a14540bdd6ea61cfd88cef538ca)
++++ b/fureverhomes_users_app/models.py	(date 1668552712392)
+@@ -193,6 +193,7 @@
+ 		pet.save(using=self._db)
+ 		return pet
+ 
++
+ class PetProfile(models.Model):
+ 	pet_profile_id = models.AutoField(primary_key=True)
+ 	pet_name = models.CharField(max_length=30)
+Index: templates/base.html
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><!DOCTYPE html>\r\n<html lang=\"en\">\r\n<head>\r\n    <meta charset=\"utf-8\">\r\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1, shrink-to-fit=no\">\r\n    <link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css\" integrity=\"sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T\" crossorigin=\"anonymous\">\r\n</head>\r\n<body>\r\n{% load crispy_forms_tags %}\r\n    <div id=\"content\" name=\"content\" class=\"main\">\r\n        <div class=\"row justify-content-center\">\r\n            <div class=\"col-8\">\r\n                <h1 class=\"mt-2\">Furever Homes</h1>\r\n                <hr class=\"mt-0 mb-4\">\r\n                {% block content %}\r\n                {% endblock %}\r\n            </div>\r\n        </div>\r\n    </div>\r\n<script src=\"https://code.jquery.com/jquery-3.3.1.slim.min.js\" integrity=\"sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo\" crossorigin=\"anonymous\"></script>\r\n<script src=\"https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js\" integrity=\"sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1\" crossorigin=\"anonymous\"></script>\r\n<script src=\"https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js\" integrity=\"sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM\" crossorigin=\"anonymous\"></script>\r\n</body>\r\n</html>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/templates/base.html b/templates/base.html
+--- a/templates/base.html	(revision ada7304576845a14540bdd6ea61cfd88cef538ca)
++++ b/templates/base.html	(date 1668551676204)
+@@ -10,8 +10,16 @@
+     <div id="content" name="content" class="main">
+         <div class="row justify-content-center">
+             <div class="col-8">
+-                <h1 class="mt-2">Furever Homes</h1>
+-                <hr class="mt-0 mb-4">
++                <div style="font-size:2.5rem">
++                    <img src="/media/home_icon.svg" alt="home icon" style="width: 30px" onclick="location.href = '{% url 'dashboard' %}'">
++                    Furever Homes
++                </div>
++                <div>
++                    <a href="{% url 'code_of_conduct' %}">Code of Conduct</a>
++                     &#x2022;
++                    <a href="{% url 'logout' %}">Log Out</a>
++                </div>
++                <hr>
+                 {% block content %}
+                 {% endblock %}
+             </div>
+Index: fureverhomes_users_app/views.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>from django.shortcuts import render\r\nfrom .forms import CreateCOAccount, CreateFOAccount, Login, DogForm, CatForm, PetType\r\nfrom .models import CurrentOwner, FutureOwner, PetProfile, Dog, Cat\r\n\r\n\r\ndef home(request):\r\n    form = Login(request.POST)\r\n    if request.method == \"POST\":\r\n        if form.is_valid():\r\n            form.save()\r\n            dashboard(request)\r\n    else:\r\n        form = Login()\r\n    return render(request, 'home_page.html', {'form': form})\r\n\r\n\r\ndef error(request):\r\n    return render(request, 'error.html')\r\n\r\n\r\ndef dashboard(request):\r\n    id = request.user.user_id\r\n    isCo = True\r\n    try:\r\n        co = CurrentOwner.objects.get(user_id=id)\r\n    except CurrentOwner.DoesNotExist:\r\n        isCo = False\r\n    if isCo:\r\n        return co_dashboard(request)\r\n    else:\r\n        return fo_dashboard(request)\r\n\r\n\r\ndef select_account_type(request):\r\n    return render(request, \"registration/select_account_type.html\")\r\n\r\n\r\ndef create_co_account(request):\r\n    form = CreateCOAccount(request.POST)\r\n    if form.is_valid():\r\n        user_email = form.cleaned_data['user_email']\r\n        password = form.cleaned_data['password']\r\n        user_name = form.cleaned_data['user_name']\r\n        user_dob = form.cleaned_data['user_dob']\r\n        user_zip = form.cleaned_data['user_zip']\r\n        CurrentOwner.objects.create_user(email=user_email, password=password, user_name=user_name, user_dob=user_dob, user_zip=user_zip)\r\n        return render(request, 'dashboard/co_dashboard.html')\r\n    return render(request, 'registration/create_co_account.html', {'form': form})\r\n\r\n\r\ndef create_fo_account(request):\r\n    form = CreateFOAccount(request.POST)\r\n    if form.is_valid():\r\n        user_email = form.cleaned_data['user_email']\r\n        password = form.cleaned_data['password']\r\n        user_name = form.cleaned_data['user_name']\r\n        user_dob = form.cleaned_data['user_dob']\r\n        user_zip = form.cleaned_data['user_zip']\r\n        FutureOwner.objects.create_user(email=user_email, password=password, user_name=user_name, user_dob=user_dob,\r\n                              user_zip=user_zip)\r\n        return render(request, 'dashboard/fo_dashboard.html')\r\n    return render(request, 'registration/create_fo_account.html', {'form': form})\r\n\r\n\r\ndef co_dashboard(request):\r\n    owner = CurrentOwner.objects.get(user_id=request.user.user_id)\r\n    pets = owner.view_my_pets()\r\n    context = {'pets': pets}\r\n    return render(request, 'dashboard/co_dashboard.html', context)\r\n\r\n\r\ndef fo_dashboard(request):\r\n    return render(request, 'dashboard/fo_dashboard')\r\n\r\n\r\ndef select_pet_type(request):\r\n    # commenting this out until I can get it to work so we can dynamically load pet form into single html file\r\n    #form = PetType(request.POST)\r\n    return render(request, 'pets/select_pet_type.html')\r\n\r\n\r\ndef create_cat_profile(request):\r\n    form = CatForm(request.POST, request.FILES)\r\n    if form.is_valid():\r\n        pet_name = form.cleaned_data['pet_name']\r\n        description = form.cleaned_data['description']\r\n        profile_pic = form.cleaned_data['profile_pic']\r\n        age = form.cleaned_data['age']\r\n        sex = form.cleaned_data['sex']\r\n        size = form.cleaned_data['size']\r\n        good_w_kids = form.cleaned_data['good_w_kids']\r\n        spayed_or_neutered = form.cleaned_data['spayed_or_neutered']\r\n        rehoming_reason = form.cleaned_data['rehoming_reason']\r\n        owner = CurrentOwner.objects.get(user_id=request.user.user_id)\r\n        declawed = form.cleaned_data['is_declawed']\r\n        Cat.objects.create_pet_profile(owner, pet_name, description=description, profile_pic=profile_pic, age=age,\r\n                                       sex=sex, size=size, good_w_kids=good_w_kids,\r\n                                       spayed_or_neutered=spayed_or_neutered, rehoming_reason=rehoming_reason,\r\n                                       is_declawed=declawed)\r\n        return render(request, 'dashboard/co_dashboard.html')\r\n    return render(request, 'pets/create_cat_profile.html', {'form': form})\r\n\r\n\r\ndef create_dog_profile(request):\r\n    form = DogForm(request.POST, request.FILES)\r\n    if form.is_valid():\r\n        #form.save()\r\n        data = form.cleaned_data\r\n        pet_name = data['pet_name']\r\n        description = data['description']\r\n        profile_pic = data['profile_pic']\r\n        age = data['age']\r\n        sex = data['sex']\r\n        size = data['size']\r\n        good_w_kids = data['good_w_kids']\r\n        spayed_or_neutered = data['spayed_or_neutered']\r\n        rehoming_reason = data['rehoming_reason']\r\n        owner = CurrentOwner.objects.get(user_id=request.user.user_id)\r\n        breed = form.cleaned_data['breed']\r\n        Dog.objects.create_pet_profile(owner, pet_name, description=description, profile_pic=profile_pic, age=age, sex=sex, size=size, good_w_kids=good_w_kids, spayed_or_neutered=spayed_or_neutered, rehoming_reason=rehoming_reason, breed=breed)\r\n        return render(request, 'dashboard/co_dashboard.html')\r\n    return render(request, 'pets/create_dog_profile.html', {'form': form})\r\n\r\n\r\ndef pet_profile(request, pet_profile_id):\r\n    return render(request, 'pets/pet_profile.html')\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/fureverhomes_users_app/views.py b/fureverhomes_users_app/views.py
+--- a/fureverhomes_users_app/views.py	(revision ada7304576845a14540bdd6ea61cfd88cef538ca)
++++ b/fureverhomes_users_app/views.py	(date 1668552712399)
+@@ -19,16 +19,19 @@
+ 
+ 
+ def dashboard(request):
+-    id = request.user.user_id
+-    isCo = True
+-    try:
+-        co = CurrentOwner.objects.get(user_id=id)
+-    except CurrentOwner.DoesNotExist:
+-        isCo = False
+-    if isCo:
+-        return co_dashboard(request)
+-    else:
+-        return fo_dashboard(request)
++    if request.user.is_anonymous:
++        return render(request, 'home_page.html')
++    else:
++        id = request.user.user_id
++        isCo = True
++        try:
++            co = CurrentOwner.objects.get(user_id=id)
++        except CurrentOwner.DoesNotExist:
++            isCo = False
++        if isCo:
++            return co_dashboard(request)
++        else:
++            return fo_dashboard(request)
+ 
+ 
+ def select_account_type(request):
+@@ -123,4 +126,10 @@
+ 
+ 
+ def pet_profile(request, pet_profile_id):
+-    return render(request, 'pets/pet_profile.html')
++    owner = CurrentOwner.objects.get(user_id=request.user.user_id)
++    pets = owner.view_my_pets()
++    context = {'pets': pets}
++    return render(request, 'pets/pet_profile.html', pets)
++
++def code_of_conduct(request):
++    return render(request, 'registration/code_of_conduct.html')
+Index: templates/registration/create_co_account.html
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>{% extends \"base.html\" %}\r\n{% load crispy_forms_tags %}\r\n{% block content %}\r\n    <h1>Looking to rehome a pet? Create an account here:</h1>\r\n    <form action=\"\" method=\"post\" enctype=\"multipart/form-data\">\r\n        {{ form|crispy }}\r\n        {% csrf_token %}\r\n        <button type=\"submit\" class=\"btn btn-success\">Create account</button>\r\n    </form>\r\n{% endblock %}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/templates/registration/create_co_account.html b/templates/registration/create_co_account.html
+--- a/templates/registration/create_co_account.html	(revision ada7304576845a14540bdd6ea61cfd88cef538ca)
++++ b/templates/registration/create_co_account.html	(date 1668551676222)
+@@ -1,4 +1,4 @@
+-{% extends "base.html" %}
++{% extends "no_auth_base.html" %}
+ {% load crispy_forms_tags %}
+ {% block content %}
+     <h1>Looking to rehome a pet? Create an account here:</h1>
+Index: templates/home_page.html
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><!DOCTYPE html>\r\n<html lang=\"en\">\r\n{% extends \"base.html\" %}\r\n<body>\r\n{% block content %}\r\n    <div id=\"login_box\">\r\n        <h2> Login to your account</h2>\r\n        <button id=\"login\" type=\"submit\" onclick=\"location.href = '{% url 'login' %}' \" class=\"btn btn-success\">Login</button>\r\n        <p>Don't have an account? Create one <a href=\"{% url 'select_account_type' %}\">here.</a></p>\r\n    </div>\r\n{% endblock %}\r\n</body>\r\n</html>\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/templates/home_page.html b/templates/home_page.html
+--- a/templates/home_page.html	(revision ada7304576845a14540bdd6ea61cfd88cef538ca)
++++ b/templates/home_page.html	(date 1668551676229)
+@@ -1,6 +1,6 @@
+ <!DOCTYPE html>
+ <html lang="en">
+-{% extends "base.html" %}
++{% extends "no_auth_base.html" %}
+ <body>
+ {% block content %}
+     <div id="login_box">
+Index: templates/dashboard/co_dashboard.html
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>{% extends \"base.html\" %}\r\n{% load crispy_forms_tags %}\r\n{% block content %}\r\n{% if user.is_authenticated %}\r\n    <h1>Welcome to Furever Homes</h1>\r\n    <h2>Create a profile for your pet here.</h2>\r\n    <button type=\"submit\" onclick=\"location.href = '{% url 'select_pet_type' %}'\" value=\"submit\" class=\"btn btn-success\">Create Profile</button>\r\n<br>\r\n<div>\r\n<h2>Your Pets</h2>\r\n    <div>\r\n    {% if pets %}\r\n        {% for i in pets %}\r\n            {% if i.profile_pic %}\r\n                <img src=\"{{i.profile_pic.url}}\" alt=\"{{i.pet_name}}\" width=\"250px\" height=\"250px\">\r\n            {% else %}\r\n                <img src=\"paw.jpg\" alt=\"No picture available\" width=\"250px\" height=\"250px\">\r\n            {% endif %}\r\n        <a href=\"{% url 'pet_profile' i.pet_profile_id %}\">{{i.pet_name}}</a>\r\n        <br>\r\n        {% endfor %}\r\n    </div>\r\n    {% else %}\r\n    <div>\r\n     <p>You do not currently have any pets</p>\r\n   </div>\r\n    {% endif %}\r\n    <h3> View Website Code of Conduct</h3>\r\n    <p><a href=\"{% url 'logout' %}\">Log Out</a></p>\r\n    {% else %}\r\n    <p> You are not logged in</p>\r\n<p><a href=\"{% url 'home' %}\"> Login Here</a></p>\r\n    {% endif %}\r\n    {% endblock %}\r\n</div>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/templates/dashboard/co_dashboard.html b/templates/dashboard/co_dashboard.html
+--- a/templates/dashboard/co_dashboard.html	(revision ada7304576845a14540bdd6ea61cfd88cef538ca)
++++ b/templates/dashboard/co_dashboard.html	(date 1668551680113)
+@@ -2,29 +2,34 @@
+ {% load crispy_forms_tags %}
+ {% block content %}
+ {% if user.is_authenticated %}
+-    <h1>Welcome to Furever Homes</h1>
+     <h2>Create a profile for your pet here.</h2>
+     <button type="submit" onclick="location.href = '{% url 'select_pet_type' %}'" value="submit" class="btn btn-success">Create Profile</button>
+-<br>
++<br><br>
+ <div>
+ <h2>Your Pets</h2>
+-    <div>
++    <hr>
+     {% if pets %}
+-        {% for i in pets %}
+-            {% if i.profile_pic %}
+-                <img src="{{i.profile_pic.url}}" alt="{{i.pet_name}}" width="250px" height="250px">
+-            {% else %}
+-                <img src="paw.jpg" alt="No picture available" width="250px" height="250px">
+-            {% endif %}
+-        <a href="{% url 'pet_profile' i.pet_profile_id %}">{{i.pet_name}}</a>
+-        <br>
+-        {% endfor %}
+-    </div>
++        <div class="container text-center">
++            <div class="row">
++                {% for i in pets %}
++                <div class="col">
++                    {% if i.profile_pic %}
++                        <img src="{{i.profile_pic.url}}" alt="{{i.pet_name}}" style="border:3px solid gray; border-radius:5px" width="250px" height="250px">
++                    {% else %}
++                        <img src="paw.jpg" alt="No picture available" width="250px" height="250px">
++                    {% endif %}
++                    <br>
++                    <a href="{% url 'pet_profile' i.pet_profile_id %}">{{i.pet_name}}</a>
++                </div>
++                {% endfor %}
++            </div>
++        </div>
+     {% else %}
+-    <div>
+-     <p>You do not currently have any pets</p>
+-   </div>
++        <div>
++            <p>You do not currently have any pets</p>
++        </div>
+     {% endif %}
++</div>
+     <h3> View Website Code of Conduct</h3>
+     <p><a href="{% url 'logout' %}">Log Out</a></p>
+     {% else %}
+Index: templates/dashboard/fo_dashboard.html
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>{% extends \"base.html\" %}\r\n{% load crispy_forms_tags %}\r\n{% block content %}\r\n<head>\r\n    <meta charset=\"UTF-8\">\r\n    <title>Your Account</title>\r\n</head>\r\n<body>\r\n    <h1>Welcome to Furever Homes</h1>\r\n\r\n    <h2>View or Change Your Preferences</h2>\r\n        <p>What kind of pet are you looking for?</p>\r\n\r\n    <h2>View Pets Near Me</h2>\r\n        <p>If you're happy with your preferences click here to view pets we'd think you'd like near you.</p>\r\n\r\n    <h2>View Pets I'm Interested In</h2>\r\n        <p>Here are pets you wanted to keep an eye on</p>\r\n\r\n\r\n<h3> View Website Code of Conduct</h3>\r\n</body>\r\n    {% endblock %}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/templates/dashboard/fo_dashboard.html b/templates/dashboard/fo_dashboard.html
+--- a/templates/dashboard/fo_dashboard.html	(revision ada7304576845a14540bdd6ea61cfd88cef538ca)
++++ b/templates/dashboard/fo_dashboard.html	(date 1668551676238)
+@@ -6,8 +6,6 @@
+     <title>Your Account</title>
+ </head>
+ <body>
+-    <h1>Welcome to Furever Homes</h1>
+-
+     <h2>View or Change Your Preferences</h2>
+         <p>What kind of pet are you looking for?</p>
+ 
+Index: local_fureverhomes/urls.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>from django.contrib import admin\r\nfrom fureverhomes_users_app import views\r\nfrom django.urls import path, include\r\nfrom django.conf import settings\r\nfrom django.conf.urls.static import static\r\n\r\nurlpatterns = [\r\n    path('admin/', admin.site.urls),\r\n    path(\"accounts/\", include(\"django.contrib.auth.urls\")),\r\n    path('', views.home, name='home'),\r\n    path('login_error/', views.error, name='error'),\r\n    path('select_account_type/', views.select_account_type, name='select_account_type'),\r\n    path('create_co_account/', views.create_co_account, name='create_co_account'),\r\n    path('create_fo_account/', views.create_fo_account, name='create_fo_account'),\r\n    path('dashboard/', views.dashboard, name='dashboard'),\r\n    path('co_dashboard/', views.co_dashboard, name='co_dashboard'),\r\n    path('fo_dashboard/', views.fo_dashboard, name='fo_dashboard'),\r\n    path('select_pet_type/', views.select_pet_type, name='select_pet_type'),\r\n    path('create_dog_profile/', views.create_dog_profile, name=\"create_dog_profile\"),\r\n    path('create_cat_profile/', views.create_cat_profile, name=\"create_cat_profile\"),\r\n    path('pet_profile/<int:pet_profile_id>', views.pet_profile, name='pet_profile'),\r\n] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/local_fureverhomes/urls.py b/local_fureverhomes/urls.py
+--- a/local_fureverhomes/urls.py	(revision ada7304576845a14540bdd6ea61cfd88cef538ca)
++++ b/local_fureverhomes/urls.py	(date 1668551680086)
+@@ -19,4 +19,5 @@
+     path('create_dog_profile/', views.create_dog_profile, name="create_dog_profile"),
+     path('create_cat_profile/', views.create_cat_profile, name="create_cat_profile"),
+     path('pet_profile/<int:pet_profile_id>', views.pet_profile, name='pet_profile'),
++    path('code_of_conduct', views.code_of_conduct, name='code_of_conduct'),
+ ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+Index: templates/registration/select_account_type.html
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>{% extends \"base.html\" %}\r\n{% load crispy_forms_tags %}\r\n{% block content %}\r\n    <h1>Are you looking to adopt or rehome a pet?</h1>\r\n    <button type=\"submit\" onclick=\"location.href = '{% url 'create_fo_account' %}'\" value=\"submit\" class=\"btn btn-success\">Adopt</button>\r\n    <button type=\"submit\" onclick=\"location.href = '{% url 'create_co_account' %}'\" value=\"submit\" class=\"btn btn-success\">Rehome</button>\r\n{% endblock %}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/templates/registration/select_account_type.html b/templates/registration/select_account_type.html
+--- a/templates/registration/select_account_type.html	(revision ada7304576845a14540bdd6ea61cfd88cef538ca)
++++ b/templates/registration/select_account_type.html	(date 1668551680094)
+@@ -1,4 +1,4 @@
+-{% extends "base.html" %}
++{% extends "no_auth_base.html" %}
+ {% load crispy_forms_tags %}
+ {% block content %}
+     <h1>Are you looking to adopt or rehome a pet?</h1>
+Index: media/home_icon.svg
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/media/home_icon.svg b/media/home_icon.svg
+new file mode 100644
+--- /dev/null	(date 1668551680124)
++++ b/media/home_icon.svg	(date 1668551680124)
+@@ -0,0 +1,9 @@
++<?xml version="1.0" encoding="utf-8"?>
++<!-- Generator: Adobe Illustrator 26.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
++<svg version="1.1" id="a" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
++	 viewBox="0 0 22 25" style="enable-background:new 0 0 22 25;" xml:space="preserve">
++<style type="text/css">
++	.st0{fill:#B5B5B5;}
++</style>
++<path class="st0" d="M22.9,11L11,0L-0.9,11H2v12c0,1,0,3,2,3h14c1,0,2-1,2-3V11H22.9z"/>
++</svg>
+Index: templates/registration/code_of_conduct.html
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/templates/registration/code_of_conduct.html b/templates/registration/code_of_conduct.html
+new file mode 100644
+--- /dev/null	(date 1668551680132)
++++ b/templates/registration/code_of_conduct.html	(date 1668551680132)
+@@ -0,0 +1,8 @@
++{% if user.is_authenticated %}
++    {% include "base.html" %}
++{% else %}
++    {% include "no_auth_base.html" %}
++{% endif %}
++{% block content %}
++    <h2>Furever Homes Code of Conduct</h2>
++{% endblock %}
+\ No newline at end of file
+Index: templates/no_auth_base.html
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/templates/no_auth_base.html b/templates/no_auth_base.html
+new file mode 100644
+--- /dev/null	(date 1668551680106)
++++ b/templates/no_auth_base.html	(date 1668551680106)
+@@ -0,0 +1,30 @@
++<!DOCTYPE html>
++<html lang="en">
++<head>
++    <meta charset="utf-8">
++    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
++    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
++</head>
++<body>
++{% load crispy_forms_tags %}
++    <div id="content" name="content" class="main">
++        <div class="row justify-content-center">
++            <div class="col-8">
++                <div style="font-size:2.5rem">
++                    <img src="/media/home_icon.svg" alt="home icon" style="width: 30px" onclick="location.href = '{% url 'dashboard' %}'">
++                    Furever Homes
++                </div>
++                <div>
++                    <a href="{% url 'code_of_conduct' %}">Code of Conduct</a>
++                </div>
++                <hr>
++                {% block content %}
++                {% endblock %}
++            </div>
++        </div>
++    </div>
++<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
++<script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
++<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
++</body>
++</html>
+\ No newline at end of file
