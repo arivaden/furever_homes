@@ -173,3 +173,8 @@ def delete_pet_profile(pet_profile_id):
     pet = PetProfile.objects.get(pet_profile_id = pet_profile_id)
     pet.objects.delete()
     return redirect('co_dashboard')
+
+def mark_as_adopted(pet_profile_id):
+    pet = PetProfile.objects.get(pet_profile_id=pet_profile_id)
+    pet.mark_as_adopted()
+    return redirect('co_dashboard')
