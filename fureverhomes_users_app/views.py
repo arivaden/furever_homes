@@ -150,6 +150,7 @@ def pet_profile(request, pet_profile_id):
     if good_w_kids:
         kids = y
     pet = {
+        "pet_profile_id" : pet_model.pet_profile_id,
         "pet_name" : pet_model.pet_name,
         "size" : size_choices.get(pet_model.size),
         "sex" : sex_choices.get(pet_model.sex),
