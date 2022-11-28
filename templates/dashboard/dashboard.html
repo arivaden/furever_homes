@@ -1,12 +1,13 @@
-{% load crispy_forms_tags %}
-{% block content %}
-    {% if user.is_authenticated %}
-        <h1>Welcome to Furever Homes</h1>
-        {% include "base.html" %}
+{% if user.is_authenticated %}
+    {% include "base.html" %}
+    <h1>Welcome to Furever Homes</h1>
         <p><a href="{% url 'logout' %}">Log Out</a></p>
-    {% else %}
-        {% include "no_auth_base.html" %}
-        <p> You are not logged in</p>
-        <p><a href="{% url 'home' %}"> Login Here</a></p>
-    {% endif %}
+{% else %}
+    {% include "no_auth_base.html" %}
+    <div class="container text-left">
+        <h3> You are not logged in.</h3>
+        <p><a href="{% url 'login' %}"> Login Here</a></p>
+    </div>
+{% endif %}
+{% block content %}
 {% endblock %}

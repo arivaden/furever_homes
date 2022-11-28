@@ -2,12 +2,19 @@
 {% block content %}
     <h3> {{pet.pet_name}} </h3>
     <hr>
-<div class="grid text-center">
     {% if pet.profile_pic.url is not None %}
-    <div class="g-col-6">
-            <img src="{{pet.profile_pic.url}}" alt="{{pet.pet_name}}" style="border:3px solid gray; border-radius:5px" width="250px" height="250px">
-    </div>
-            <div>
+    <div class="container text-center">
+        <div class="text-right">
+            {% if editor %}
+                <a href="{% url 'delete_pet_profile' pet.pet_profile_id %}"> Delete Pet Profile</a>
+            {% endif %}
+        </div>
+        <div class="row">
+            <div class="col">
+                <img src="{{pet.profile_pic.url}}" alt="{{pet.pet_name}}" style="border:3px solid gray; border-radius:5px" width="250px" height="250px">
+            </div>
+            <div class="text-left">
+                <div class="col">
                 <div class="font-weight-bold"> Sex:</div><div>{{pet.sex}} </div> <div class="font-weight-bold"> Age:</div> <div>{{pet.age}}</div> <div class="font-weight-bold"> Size:</div> <div>{{pet.size}}</div>
                 <div class="font-weight-bold"> Spayed/Neutered:</div> <div>{{pet.spayed_or_neutered}}</div>
                 <div class="font-weight-bold"> Good With Kids: </div> <div>{{pet.good_w_kids}}</div>
@@ -16,9 +23,16 @@
                 <div class="font-weight-bold">Rehoming reason: </div>
                 <div> {{pet.rehoming_reason}} </div>
             </div>
+            </div>
+        </div>
     </div>
     {% else %}
             <div>
+                <div class="text-right">
+                    {% if editor %}
+                        <a href="{% url 'delete_pet_profile' pet.pet_profile_id %}"> Delete Pet Profile</a>
+                    {% endif %}
+                </div>
                 <div class="font-weight-bold"> Sex:</div><div>{{pet.sex}} </div> <div class="font-weight-bold"> Age:</div> <div>{{pet.age}}</div> <div class="font-weight-bold"> Size:</div> <div>{{pet.size}}</div>
                 <div class="font-weight-bold"> Spayed/Neutered:</div> <div>{{pet.spayed_or_neutered}}</div>
                 <div class="font-weight-bold"> Good With Kids: </div> <div>{{pet.good_w_kids}}</div>
@@ -28,7 +42,4 @@
                 <div> {{pet.rehoming_reason}} </div>
             </div>
     {% endif %}
-{% if editor %}
-<a href="{% url 'delete_pet_profile' pet.pet_profile_id %}"> Delete Pet Profile</a>
-{% endif %}
 {% endblock %}
