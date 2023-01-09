@@ -132,6 +132,12 @@ class FutureOwner(User):
 		new_co.save()
 		self.delete()
 
+	#should work according to documentation, new code
+	def view_liked_pets(self):
+		fo_id = self.fo_id
+		clicked_pets = PetProfile.objects.filter(interested_users__id=fo_id)
+		return clicked_pets
+
 class CurrentOwner(User):
 	co_id = User.user_id
 
@@ -234,12 +240,11 @@ class PetProfile(models.Model):
 	def mark_as_adopted(self):
 		self.is_adopted = True
 		self.save()
-	'''def get_pets(self):
-		if self.dog:
-			return self.dog
-		elif self.cat:
-		else:
-			raise RuntimeError("Unknown subclass")'''
+
+	#new code, should work according to documentation
+	def mark_as_interested(self, fo):
+		self.interested_users.add(fo)
+		self.save()
 
 	class Meta:
 		ordering = ["date_uploaded"]

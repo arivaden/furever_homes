@@ -1,6 +1,6 @@
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
-from .forms import CreateCOAccount, CreateFOAccount, Login, DogForm, CatForm, PetType
+from .forms import CreateCOAccount, CreateFOAccount, Login, DogForm, CatForm, GetPreferences
 from .models import CurrentOwner, FutureOwner, PetProfile, Dog, Cat
 
 
@@ -74,7 +74,21 @@ def co_dashboard(request):
 
 
 def fo_dashboard(request):
-    return render(request, 'dashboard/fo_dashboard')
+    adopter = FutureOwner.objects.get(user_id=request.user.user_id)
+    pref_form = GetPreferences(request.POST)
+    data = pref_form.cleaned_data
+    if pref_form.is_valid:
+        size = data['size_pref']
+        type = data['type_pref']
+        age = data['age_pref']
+        kids = data['kids_pref']
+        fixed = data['fixed_pref']
+        sex = data['sex_pref']
+        adopter.edit_preferences(type,size,age,sex,kids,fixed)
+        return render(request, 'dashboard/fo_dashboard.html')
+    pets_in_area = adopter.find_pets()
+    interested_pets = adopter.view_liked_pets()
+    return render(request, 'dashboard/fo_dashboard', {'pref_form':pref_form, 'pet_pool':pets_in_area, 'liked_pets':interested_pets})
 
 
 def select_pet_type(request):
