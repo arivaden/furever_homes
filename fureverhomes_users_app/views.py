@@ -20,19 +20,21 @@ def error(request):
 
 
 def dashboard(request):
-    id = request.user.user_id
-    isCo = True
+    if not request.user.is_anonymous:
+        id = request.user.user_id
+        isCo = True
 
-    try:
-        co = CurrentOwner.objects.get(user_id=id)
-    except CurrentOwner.DoesNotExist:
-        isCo = False
+        try:
+            co = CurrentOwner.objects.get(user_id=id)
+        except CurrentOwner.DoesNotExist:
+            isCo = False
 
-    if isCo:
-        return co_dashboard(request) #render(request, 'dashboard/co_dashboard.html')
+        if isCo:
+            return co_dashboard(request) #render(request, 'dashboard/co_dashboard.html')
+        else:
+            return fo_dashboard(request)#render(request, 'dashboard/fo_dashboard.html')
     else:
-        return fo_dashboard(request)#render(request, 'dashboard/fo_dashboard.html')
-    #return render(request, 'dashboard/dashboard.html')
+        return render(request, 'dashboard/dashboard.html')
 
 
 def select_account_type(request):
@@ -164,6 +166,7 @@ def pet_profile(request, pet_profile_id):
     if good_w_kids:
         kids = y
     pet = {
+        "pet_profile_id" : pet_model.pet_profile_id,
         "pet_name" : pet_model.pet_name,
         "size" : size_choices.get(pet_model.size),
         "sex" : sex_choices.get(pet_model.sex),
@@ -183,9 +186,9 @@ def edit_pet_profile(request, pet_profile_id):
     pet.edit_pet_profile()
     return(request, )
 
-def delete_pet_profile(pet_profile_id):
+def delete_pet_profile(self, pet_profile_id):
     pet = PetProfile.objects.get(pet_profile_id = pet_profile_id)
-    pet.objects.delete()
+    pet.delete()
     return redirect('co_dashboard')
 
 def mark_as_adopted(pet_profile_id):
