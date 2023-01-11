@@ -21,4 +21,5 @@ urlpatterns = [
     path('pet_profile/<int:pet_profile_id>', views.pet_profile, name='pet_profile'),
     path('code_of_conduct', views.code_of_conduct, name='code_of_conduct'),
     path('delete_pet_profile/<int:pet_profile_id>', views.delete_pet_profile, name='delete_pet_profile'),
+    path('fo_liked_pets/<int:fo_profile_id>', views.fo_view_interested_pets, name='fo_view_interested_pets')
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

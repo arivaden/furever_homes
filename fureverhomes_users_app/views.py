@@ -89,8 +89,12 @@ def fo_dashboard(request):
         adopter.edit_preferences(type,size,age,sex,kids,fixed)
         return render(request, 'dashboard/fo_dashboard.html')
     pets_in_area = adopter.find_pets()
+    return render(request, 'dashboard/fo_dashboard', {'pref_form': pref_form, 'pet_pool':pets_in_area})
+
+def fo_view_interested_pets(request):
+    adopter = FutureOwner.objects.get(user_id=request.user.user_id)
     interested_pets = adopter.view_liked_pets()
-    return render(request, 'dashboard/fo_dashboard', {'pref_form':pref_form, 'pet_pool':pets_in_area, 'liked_pets':interested_pets})
+    return render(request, 'pets/fo_liked_pets.html', {'liked_pets':interested_pets})
 
 
 def select_pet_type(request):
