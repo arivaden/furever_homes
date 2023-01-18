@@ -7,6 +7,7 @@
         <div class="text-right">
             {% if editor %}
                 <a href="{% url 'delete_pet_profile' pet.pet_profile_id %}"> Delete Pet Profile</a>
+                <button>Mark Pet As Adopted</button>
             {% endif %}
         </div>
         <div class="row">
@@ -41,5 +42,10 @@
                 <div class="font-weight-bold">Rehoming reason: </div>
                 <div> {{pet.rehoming_reason}} </div>
             </div>
+    {% endif %}
+    {% if adopter %}
+    <form action="{% url 'mark_as_interested' pet.pet_profile_id user.user_id %}" method="POST">
+        <button type="submit">I'm Interested</button>
+    </form>
     {% endif %}
 {% endblock %}

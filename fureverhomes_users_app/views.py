@@ -153,9 +153,16 @@ def create_dog_profile(request):
 def pet_profile(request, pet_profile_id):
     pet_model = PetProfile.objects.get(pet_profile_id=pet_profile_id)
     editor = False
+    adopter = True
     id = request.user.user_id
     if id == pet_model.current_owner.user_id:
         editor = True
+        adopter = False
+    else:
+        try:
+            fo = FutureOwner.objects.get(user_id=id)
+        except FutureOwner.DoesNotExist:
+            adopter = False
     fixed = pet_model.spayed_or_neutered
     good_w_kids = pet_model.good_w_kids
     age_choices = {0:'Young: 0-1 Years', 1:"Adult: 1-6 Years", 2:"Senior: 6+ Years"}
@@ -182,7 +189,7 @@ def pet_profile(request, pet_profile_id):
             "rehoming_reason" : pet_model.rehoming_reason
 
     }
-    return render(request, 'pets/pet_profile.html', {'pet': pet, 'editor':editor})
+    return render(request, 'pets/pet_profile.html', {'pet': pet, 'editor':editor, 'adopter':adopter})
 
 def edit_pet_profile(request, pet_profile_id):
     pet = PetProfile.objects.get(pet_profile_id = pet_profile_id)
@@ -199,3 +206,9 @@ def mark_as_adopted(pet_profile_id):
     pet = PetProfile.objects.get(pet_profile_id=pet_profile_id)
     pet.mark_as_adopted()
     return redirect('co_dashboard')
+
+def mark_as_interested(pet_profile_id, user_id):
+    pet = PetProfile.objects.get(pet_profile_id=pet_profile_id)
+    adopter = FutureOwner.objects.get(fo_id=user_id)
+    pet.mark_as_interested(adopter)
+    return redirect('pet_profile')
