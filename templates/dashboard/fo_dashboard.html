@@ -8,14 +8,18 @@
 <body>
     <h2>View or Change Your Preferences</h2>
         <p>What kind of pet are you looking for?</p>
-        <p> PUT FORM HERE </p>
+        <form action="" method="post" enctype="multipart/form-data">
+        {{ pref_form|crispy }}
+        {% csrf_token %}
+        <button type="submit" class="btn btn-success ">Save preferences</button>
+</form>
     <div>
     <h2>View Pets Near Me</h2>
         <p>If you're happy with your preferences click here to view pets we'd think you'd like near you.</p>
         {% if pet_pool %}
                 <div class="container text-center">
             <div class="row">
-                {% for i in pets %}
+                {% for i in pet_pool %}
                 <div class="col">
                     {% if i.profile_pic %}
                         <img src="{{i.profile_pic.url}}" alt="{{i.pet_name}}" style="border:3px solid gray; border-radius:5px" width="250px" height="250px">

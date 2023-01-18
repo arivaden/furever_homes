@@ -96,8 +96,10 @@ class FutureOwner(User):
 			pet_pool = Dog.objects.filter(age=self.age_pref).exclude(is_adopted=True)
 		else:
 			pet_pool = Cat.objects.filter(age=self.age_pref).exclude(is_adopted=True)
-
+		length = str(len(pet_pool))
+		print("filter one leaves" + length)
 		#filter with extra criteria
+
 		if self.sex_pref == 'M' or self.sex_pref == 'F':
 			pet_pool = pet_pool.filter(sex=self.sex_pref)
 		if self.kids_pref == 0:
@@ -106,7 +108,9 @@ class FutureOwner(User):
 			pet_pool = pet_pool.filter(spayed_or_neutered=True)
 		if self.size_pref != 4:
 			pet_pool = pet_pool.filter(size = self.size_pref)
-
+		length = str(len(pet_pool))
+		print("filter two leaves" + length)
+		print('Finding pets...')
 		return pet_pool
 
 	# allows user to change preferences, must specify name of field being updated
