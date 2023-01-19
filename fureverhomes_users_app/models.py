@@ -96,8 +96,10 @@ class FutureOwner(User):
 			pet_pool = Dog.objects.filter(age=self.age_pref).exclude(is_adopted=True)
 		else:
 			pet_pool = Cat.objects.filter(age=self.age_pref).exclude(is_adopted=True)
-
+		length = str(len(pet_pool))
+		print("filter one leaves" + length)
 		#filter with extra criteria
+
 		if self.sex_pref == 'M' or self.sex_pref == 'F':
 			pet_pool = pet_pool.filter(sex=self.sex_pref)
 		if self.kids_pref == 0:
@@ -106,7 +108,9 @@ class FutureOwner(User):
 			pet_pool = pet_pool.filter(spayed_or_neutered=True)
 		if self.size_pref != 4:
 			pet_pool = pet_pool.filter(size = self.size_pref)
-
+		length = str(len(pet_pool))
+		print("filter two leaves" + length)
+		print('Finding pets...')
 		return pet_pool
 
 	# allows user to change preferences, must specify name of field being updated
@@ -131,6 +135,12 @@ class FutureOwner(User):
 		new_co.user_name = self.user_name
 		new_co.save()
 		self.delete()
+
+	#should work according to documentation, new code
+	def view_liked_pets(self):
+		fo_id = self.fo_id
+		clicked_pets = PetProfile.objects.filter(interested_users__user_id=fo_id)
+		return clicked_pets
 
 class CurrentOwner(User):
 	co_id = User.user_id
@@ -234,12 +244,11 @@ class PetProfile(models.Model):
 	def mark_as_adopted(self):
 		self.is_adopted = True
 		self.save()
-	'''def get_pets(self):
-		if self.dog:
-			return self.dog
-		elif self.cat:
-		else:
-			raise RuntimeError("Unknown subclass")'''
+
+	#new code, should work according to documentation
+	def mark_as_interested(self, fo):
+		self.interested_users.add(fo)
+		self.save()
 
 	class Meta:
 		ordering = ["date_uploaded"]

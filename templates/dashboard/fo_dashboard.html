@@ -1,21 +1,41 @@
 {% extends "base.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
+<div id="content"><p><a href="{% url 'fo_liked_pets' %}"> My Liked Pets Page</a></p></div>
 <head>
     <meta charset="UTF-8">
     <title>Your Account</title>
 </head>
 <body>
     <h2>View or Change Your Preferences</h2>
-        <p>What kind of pet are you looking for?</p>
-
+        <form action="" method="post" enctype="multipart/form-data">
+        {{ pref_form|crispy }}
+        {% csrf_token %}
+        <button type="submit" class="btn btn-success ">Save preferences</button>
+</form>
+    <div>
+        <br>
     <h2>View Pets Near Me</h2>
         <p>If you're happy with your preferences click here to view pets we'd think you'd like near you.</p>
-
-    <h2>View Pets I'm Interested In</h2>
-        <p>Here are pets you wanted to keep an eye on</p>
-
-
-<h3> View Website Code of Conduct</h3>
+        {% if pet_pool %}
+                <div class="container text-center">
+            <div class="row">
+                {% for i in pet_pool %}
+                <div class="col">
+                    {% if i.profile_pic %}
+                        <img src="{{i.profile_pic.url}}" alt="{{i.pet_name}}" style="border:3px solid gray; border-radius:5px" width="250px" height="250px">
+                    {% else %}
+                        <img src="paw.jpg" alt="No picture available" width="250px" height="250px">
+                    {% endif %}
+                    <br>
+                    <a href="{% url 'pet_profile' i.pet_profile_id %}">{{i.pet_name}}</a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% else %}
+    <p> There are no pets in your area</p>
+    {% endif %}
+    </div>
 </body>
     {% endblock %}
