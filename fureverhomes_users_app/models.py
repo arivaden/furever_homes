@@ -139,7 +139,7 @@ class FutureOwner(User):
 	#should work according to documentation, new code
 	def view_liked_pets(self):
 		fo_id = self.fo_id
-		clicked_pets = PetProfile.objects.filter(interested_users__id=fo_id)
+		clicked_pets = PetProfile.objects.filter(interested_users__user_id=fo_id)
 		return clicked_pets
 
 class CurrentOwner(User):

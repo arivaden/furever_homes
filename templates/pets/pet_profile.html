@@ -44,7 +44,8 @@
             </div>
     {% endif %}
     {% if adopter %}
-    <form action="{% url 'mark_as_interested' pet.pet_profile_id user.user_id %}" method="POST">
+    <form action="{% url 'mark_as_interested' pet.pet_profile_id %}" method="POST">
+        {% csrf_token %}
         <button type="submit">I'm Interested</button>
     </form>
     {% endif %}

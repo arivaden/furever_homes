@@ -30,9 +30,9 @@ def dashboard(request):
             isCo = False
 
         if isCo:
-            return co_dashboard(request) #render(request, 'dashboard/co_dashboard.html')
+            return co_dashboard(request)
         else:
-            return fo_dashboard(request)#render(request, 'dashboard/fo_dashboard.html')
+            return fo_dashboard(request)
     else:
         return render(request, 'dashboard/dashboard.html')
 
@@ -86,11 +86,12 @@ def fo_dashboard(request):
         fixed = pref_form.cleaned_data['fixed_pref']
         sex = pref_form.cleaned_data['sex_pref']
         adopter.edit_preferences(type, size, age, sex, kids, fixed)
-        return render(request, 'dashboard/fo_dashboard.html')
-    pets_in_area = adopter.find_pets()
-    return render(request, 'dashboard/fo_dashboard.html', {'pref_form': pref_form, 'pet_pool':pets_in_area})
+        pets_in_area = adopter.find_pets()
+        return render(request, 'dashboard/fo_dashboard.html', {'pref_form': pref_form, 'pet_pool':pets_in_area})
+    return render(request, 'dashboard/fo_dashboard.html', {'pref_form': pref_form})
 
-def fo_view_interested_pets(request):
+
+def fo_liked_pets(request):
     adopter = FutureOwner.objects.get(user_id=request.user.user_id)
     interested_pets = adopter.view_liked_pets()
     return render(request, 'pets/fo_liked_pets.html', {'liked_pets':interested_pets})
@@ -186,7 +187,6 @@ def pet_profile(request, pet_profile_id):
            "profile_pic": pet_model.profile_pic,
            "description": pet_model.description,
             "rehoming_reason" : pet_model.rehoming_reason
-
     }
     return render(request, 'pets/pet_profile.html', {'pet': pet, 'editor':editor, 'adopter':adopter})
 
@@ -206,8 +206,9 @@ def mark_as_adopted(pet_profile_id):
     pet.mark_as_adopted()
     return redirect('co_dashboard')
 
-def mark_as_interested(pet_profile_id, user_id):
+
+def mark_as_interested(request, pet_profile_id):
     pet = PetProfile.objects.get(pet_profile_id=pet_profile_id)
-    adopter = FutureOwner.objects.get(fo_id=user_id)
+    adopter = FutureOwner.objects.get(user_id=request.user.user_id)
     pet.mark_as_interested(adopter)
-    return redirect('pet_profile')
+    return redirect('fo_liked_pets')#render(request, 'pets/pet_profile.html')

@@ -1,19 +1,20 @@
 {% extends "base.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
+<div id="content"><p><a href="{% url 'fo_liked_pets' %}"> My Liked Pets Page</a></p></div>
 <head>
     <meta charset="UTF-8">
     <title>Your Account</title>
 </head>
 <body>
     <h2>View or Change Your Preferences</h2>
-        <p>What kind of pet are you looking for?</p>
         <form action="" method="post" enctype="multipart/form-data">
         {{ pref_form|crispy }}
         {% csrf_token %}
         <button type="submit" class="btn btn-success ">Save preferences</button>
 </form>
     <div>
+        <br>
     <h2>View Pets Near Me</h2>
         <p>If you're happy with your preferences click here to view pets we'd think you'd like near you.</p>
         {% if pet_pool %}
@@ -36,12 +37,5 @@
     <p> There are no pets in your area</p>
     {% endif %}
     </div>
-    <div>
-    <h2>View Pets I'm Interested In</h2>
-
-        <p><a href="{% url 'fo_liked_pets' %}"> My Liked Pets Page</a></p>
-    </div>
-
-<h3> View Website Code of Conduct</h3>
 </body>
     {% endblock %}
