@@ -85,6 +85,15 @@ class FutureOwner(User):
 	kids_pref = models.IntegerField(default=0, choices=good_w_kids)
 	fixed_pref = models.IntegerField(default=0, choices=spayed_or_neutered)
 
+	#find users fo can message
+	def get_contactable_owners(self):
+		liked_pets = self.view_liked_pets()
+		owners_of_pets = []
+		for pet in liked_pets:
+			owners_of_pets.append(pet.current_owner)
+		return owners_of_pets
+
+
 	# user can input preferences specific for dogs/cats
 	def specific_preferences(self):
 		pass
@@ -140,6 +149,16 @@ class FutureOwner(User):
 
 class CurrentOwner(User):
 	co_id = User.user_id
+
+	def get_contactable_adopters(self):
+		my_pets = self.view_my_pets()
+		interested_adopters = []
+		pet_names = []
+		for pet in my_pets:
+			interested_adopters.append(pet.interested_users)
+			pet_names.append(pet.pet_name)
+		return [pet_names, interested_adopters]
+
 
 	def view_my_pets(self):
 		co_pets = PetProfile.objects.filter(current_owner=self.user_id).exclude(is_adopted=True)

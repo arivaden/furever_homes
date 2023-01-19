@@ -212,3 +212,20 @@ def mark_as_interested(pet_profile_id, user_id):
     adopter = FutureOwner.objects.get(fo_id=user_id)
     pet.mark_as_interested(adopter)
     return redirect('pet_profile')
+
+def inbox(request):
+    id = request.user.user_id
+    is_co = True
+    try:
+        co = CurrentOwner.objects.get(user_id=id)
+    except CurrentOwner.DoesNotExist:
+        is_co = False
+
+    if is_co:
+        owner = FutureOwner.objects.get(user_id=id)
+        contactable_users = owner.get_contactable_adopters()
+    else:
+        adopter = FutureOwner.objects.get(user_id= id)
+        contactable_users = adopter.get_contactable_owners()
+
+    return render(request, 'inbox.html', {'is_co': is_co, 'contacts': contactable_users})
