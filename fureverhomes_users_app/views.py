@@ -132,7 +132,6 @@ def code_of_conduct(request):
 def create_dog_profile(request):
     form = DogForm(request.POST, request.FILES)
     if form.is_valid():
-        #form.save()
         data = form.cleaned_data
         pet_name = data['pet_name']
         description = data['description']
@@ -190,16 +189,29 @@ def pet_profile(request, pet_profile_id):
     }
     return render(request, 'pets/pet_profile.html', {'pet': pet, 'editor':editor, 'adopter':adopter})
 
+
 def edit_pet_profile(request, pet_profile_id):
     pet = PetProfile.objects.get(pet_profile_id = pet_profile_id)
+    id = pet_profile_id
+    isCat = True
+    try:
+        pet = Cat.objects.get(pet_profile_id=id)
+    except pet.DoesNotExist:
+        isCat = False
 
-    pet.edit_pet_profile()
-    return(request, )
+    if isCat:
+        form = CatForm(request.POST, request.FILES)
+        return render(request, 'pets/edit_pet_profile.html', {'form': form})
+    else:
+        form = DogForm(request.POST, request.FILES)
+        return render(request, 'pets/edit_pet_profile.html', {'form': form})
+
 
 def delete_pet_profile(self, pet_profile_id):
     pet = PetProfile.objects.get(pet_profile_id = pet_profile_id)
     pet.delete()
     return redirect('co_dashboard')
+
 
 def mark_as_adopted(pet_profile_id):
     pet = PetProfile.objects.get(pet_profile_id=pet_profile_id)
