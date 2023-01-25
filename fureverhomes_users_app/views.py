@@ -234,7 +234,8 @@ def inbox(request):
         is_co = False
 
     if is_co:
-        owner = Current.objects.get(user_id=id)
+        #
+        owner = CurrentOwner.objects.get(user_id=id)
         contactable_users = owner.get_contactable_adopters()
     else:
         adopter = FutureOwner.objects.get(user_id= id)
