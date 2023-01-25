@@ -225,6 +225,7 @@ def mark_as_interested(request, pet_profile_id):
     pet.mark_as_interested(adopter)
     return redirect('fo_liked_pets')  # render(request, 'pets/pet_profile.html')
 
+
 def inbox(request):
     id = request.user.user_id
     is_co = True
@@ -241,4 +242,4 @@ def inbox(request):
         adopter = FutureOwner.objects.get(user_id= id)
         contactable_users = adopter.get_contactable_owners()
 
-    return render(request, 'inbox.html', {'is_co': is_co, 'contacts': contactable_users})
+    return render(request, 'messaging/inbox.html', {'is_co': is_co, 'contacts': contactable_users})
