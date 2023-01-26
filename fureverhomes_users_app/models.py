@@ -90,7 +90,9 @@ class FutureOwner(User):
 		liked_pets = self.view_liked_pets()
 		owners_of_pets = []
 		for pet in liked_pets:
-			owners_of_pets.append(pet.current_owner)
+			owner = pet.current_owner
+			owners_of_pets.append(owner)
+		print(owners_of_pets)
 		return owners_of_pets
 
 
