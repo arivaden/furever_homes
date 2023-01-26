@@ -235,10 +235,11 @@ def inbox(request):
         is_co = False
 
     if is_co:
-        #
+        #returns two tiered list
         owner = CurrentOwner.objects.get(user_id=id)
         contactable_users = owner.get_contactable_adopters()
     else:
+        #returns only owner objects
         adopter = FutureOwner.objects.get(user_id= id)
         contactable_users = adopter.get_contactable_owners()
 
