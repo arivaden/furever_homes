@@ -6,6 +6,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.contrib.auth.models import PermissionsMixin
 from django.core import validators
+from django.db.models import Q
 
 
 class UserManager(BaseUserManager):
@@ -67,6 +68,10 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 	def getName(self):
 		return self.user_name
+
+	def getMessageHistory(self, other_user):
+		user_messages = Message.objects.filter(Q(sender=self.user_id, recipient=other_user.user_id) | Q(sender=other_user.user_id, recipient=self.user_id)).order_by('message_dt')
+		return user_messages
 
 
 #these are subclasses of User
@@ -211,6 +216,7 @@ class Message(models.Model):
 	message_content = models.CharField(max_length=1000)
 	receiver_id = models.ForeignKey(User, models.CASCADE, related_name='receiver')
 	sender_id = models.ForeignKey(User, models.CASCADE, related_name='sender')
+
 
 
 class PetManager(models.Manager):

@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+<body>
+{% block content %}
+<div>
+{% if past_messages %}
+    {% for msg in past_messages %}
+    <!-- must align messages to right or left side of screen depending on who they're from (recipient/sender) -->
+    <p>{{ msg.sender }} on {{ msg.message_dt|date:'N d G:i' }}
+        {{ msg.content }}</p>
+    {% endfor %}
+{% else %}
+<p> You have not sent this user any messages or vice versa</p>
+{% endif %}
+</div>
+<div>
+<!-- This is where the message form will go (Text box and send button) -->
+</div>
+
+{% endblock %}
+</body>
+

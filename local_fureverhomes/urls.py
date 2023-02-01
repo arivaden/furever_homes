@@ -25,4 +25,5 @@ urlpatterns = [
     path('mark_as_interested/<int:pet_profile_id>', views.mark_as_interested, name='mark_as_interested'),
     path('fo_liked_pets/', views.fo_liked_pets, name='fo_liked_pets'),
     path('inbox/', views.inbox, name='inbox'),
+    path('direct_message/', views.direct_message, name='direct_message'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

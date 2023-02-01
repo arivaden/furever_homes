@@ -4,7 +4,7 @@
     {% if is_co %}
         {% if contactable_users %}
             {% for pet_names, interested_adopters in contactable_users %}
-            <p>{{ interested_adopters.user_name }}  Re: {{pet_names.pet_name}} > </p>
+    <p> <a href="{% url 'direct_message' interested_adopters.user_id %}">{{ interested_adopters.user_name }}  Re: {{pet_names.pet_name}} </a> </p>
             {% endfor %}
         {% else %}
         <p> You cannot contact any adopters yet, since they haven't liked any of your pets. Once they mark a pet
@@ -13,7 +13,7 @@
     {% else %}
         {% if contactable_users %}
             {% for owner in contactable_users %}
-            <p>{{ owner.user_name }} > </p>
+            <p><a href="{% url 'direct_message' owner.user_id %}"> {{ owner.user_name }} </a> </p>
             {% endfor %}
         {% else %}
         <p> You cannot contact any owners yet, since you haven't liked any pets. Once you mark a pet

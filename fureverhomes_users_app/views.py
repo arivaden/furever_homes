@@ -1,7 +1,7 @@
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from .forms import CreateCOAccount, CreateFOAccount, Login, DogForm, CatForm, GetPreferences
-from .models import CurrentOwner, FutureOwner, PetProfile, Dog, Cat
+from .models import CurrentOwner, FutureOwner, PetProfile, Dog, Cat, Message, User
 
 
 def home(request):
@@ -244,3 +244,11 @@ def inbox(request):
         contactable_users = adopter.get_contactable_owners()
 
     return render(request, 'messaging/inbox.html', {'is_co': is_co, 'contacts': contactable_users})
+
+def direct_message(request, recipient_id):
+    sender_id = request.user.user_id
+    # display previous message history ordered by date
+    sender = User.objects.get(user_id = sender_id)
+    messages = sender.getMessageHistory(recipient_id)
+    # should be able to submit a message as a form, and when its created, save DT
+    return render(request, 'messaging/direct_message.html',{'past_messages':messages})
