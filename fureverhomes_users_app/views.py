@@ -1,7 +1,8 @@
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
-from .forms import CreateCOAccount, CreateFOAccount, Login, DogForm, CatForm, GetPreferences
+from .forms import CreateCOAccount, CreateFOAccount, Login, DogForm, CatForm, GetPreferences, MessageForm
 from .models import CurrentOwner, FutureOwner, PetProfile, Dog, Cat, Message, User
+import datetime
 
 
 def home(request):
@@ -249,6 +250,13 @@ def direct_message(request, recipient_id):
     sender_id = request.user.user_id
     # display previous message history ordered by date
     sender = User.objects.get(user_id = sender_id)
+    recipient = User.objects.get(user_id=recipient_id)
     messages = sender.getMessageHistory(recipient_id)
     # should be able to submit a message as a form, and when its created, save DT
-    return render(request, 'messaging/direct_message.html',{'past_messages':messages})
+    message_form = MessageForm(request.POST)
+    if message_form.is_valid():
+        data = message_form.cleaned_data
+        content = data['content']
+        time_sent = datetime.datetime.now()
+        Message.objects.create_message(content, time_sent,recipient,sender)
+    return render(request, 'messaging/direct_message.html',{'past_messages':messages, "form":message_form})

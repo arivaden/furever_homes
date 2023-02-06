@@ -209,6 +209,11 @@ class Report(models.Model):
 	user_reporter = models.ForeignKey(User, on_delete=models.CASCADE, related_name='reporter')
 	moderator_assigned = models.ForeignKey(Moderator, on_delete=models.PROTECT)
 
+class MessageManager(models.Manager):
+	def create_message(self, content, time_sent, reciever_id, sender_id):
+		msg = self.model(message_content = content, message_dt=time_sent, receiver_id =reciever_id, sender_id=sender_id)
+		msg.save()
+		return msg
 
 class Message(models.Model):
 	message_id = models.BigAutoField(primary_key = True)
@@ -216,7 +221,7 @@ class Message(models.Model):
 	message_content = models.CharField(max_length=1000)
 	receiver_id = models.ForeignKey(User, models.CASCADE, related_name='receiver')
 	sender_id = models.ForeignKey(User, models.CASCADE, related_name='sender')
-
+	objects = MessageManager()
 
 
 class PetManager(models.Manager):

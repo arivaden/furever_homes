@@ -1,5 +1,5 @@
 from django import forms
-from .models import User, CurrentOwner, FutureOwner, PetProfile, Dog, Cat
+from .models import User, CurrentOwner, FutureOwner, PetProfile, Dog, Cat, Message
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.forms import UserCreationForm
 
@@ -124,6 +124,17 @@ class Login(forms.ModelForm):
 	class Meta:
 		fields = ['user_email', 'password']
 		model = User
+
+
+class MessageForm(forms.ModelForm):
+	class Meta:
+		model = Message
+		fields = ['message_content']
+		help_texts = { 'message_content' : _("Write your message, but please keep it under 1000 characters") }
+		error_messages = {"message_content" : {"max_length": _("Your message is too long. Please shorten it.") } }
+
+
+
 		'''
 #first name
 forms.CharField()
