@@ -2,7 +2,7 @@
 {% block content %}
 <body>
     {% if is_co %}
-        {% if contactable_users %}
+        {% if contacts %}
             {% for pet_name, adopter in contactable_users %}
                     <p> <a href="{% url 'direct_message' adopter.user_id %}">{{ adopter.user_name }}  Re: {{pet_name}} </a> </p>
             {% endfor %}
