@@ -239,10 +239,13 @@ def inbox(request):
         #returns two tiered list
         owner = CurrentOwner.objects.get(user_id=id)
         contactable_users = owner.get_contactable_adopters()
+        pet_names = contactable_users[0]
+        owner_names = contactable_users[1]
     else:
         #returns only owner objects
         adopter = FutureOwner.objects.get(user_id= id)
         contactable_users = adopter.get_contactable_owners()
+
 
     return render(request, 'messaging/inbox.html', {'is_co': is_co, 'contacts': contactable_users})
 
