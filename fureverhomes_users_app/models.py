@@ -168,7 +168,7 @@ class CurrentOwner(User):
 		for pet in my_pets:
 			interested_adopters.append(pet.interested_users)
 			pet_names.append(pet.pet_name)
-		return [pet_names, interested_adopters]
+		return zip(pet_names, interested_adopters)
 
 
 	def view_my_pets(self):
