@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{% load crispy_forms_tags %}
 <body>
 {% block content %}
 <div>
@@ -7,7 +7,7 @@
     {% for msg in past_messages %}
     <!-- must align messages to right or left side of screen depending on who they're from (recipient/sender) -->
     <p>{{ msg.sender }} on {{ msg.message_dt|date:'N d G:i' }}
-        {{ msg.content }}</p>
+        {{ msg.message_content }}</p>
     {% endfor %}
 {% else %}
 <p> You have not sent this user any messages or vice versa</p>

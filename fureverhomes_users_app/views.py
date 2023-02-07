@@ -181,14 +181,20 @@ def pet_profile(request, pet_profile_id):
         "pet_name" : pet_model.pet_name,
         "size" : size_choices.get(pet_model.size),
         "sex" : sex_choices.get(pet_model.sex),
-            "spayed_or_neutered" : spayed_neutered,
-           "good_w_kids" : kids,
-           "age": age_choices.get(pet_model.age),
-           "profile_pic": pet_model.profile_pic,
-           "description": pet_model.description,
-            "rehoming_reason" : pet_model.rehoming_reason
+        "spayed_or_neutered" : spayed_neutered,
+        "good_w_kids" : kids,
+        "age": age_choices.get(pet_model.age),
+        "profile_pic": pet_model.profile_pic,
+        "description": pet_model.description,
+        "rehoming_reason" : pet_model.rehoming_reason,
+        "is_adopted": pet_model.is_adopted,
+        "interested_users": pet_model.interested_users
     }
-    return render(request, 'pets/pet_profile.html', {'pet': pet, 'editor':editor, 'adopter':adopter})
+    if adopter:
+        fo = FutureOwner.objects.get(user_id=id)
+    else:
+        fo = None
+    return render(request, 'pets/pet_profile.html', {'pet': pet, 'editor':editor, 'adopter':adopter, 'fo': fo})
 
 
 def edit_pet_profile(request, pet_profile_id):
@@ -213,18 +219,34 @@ def delete_pet_profile(self, pet_profile_id):
     pet.delete()
     return redirect('co_dashboard')
 
-
-def mark_as_adopted(pet_profile_id):
+'''
+def mark_as_adopted(self, pet_profile_id):
     pet = PetProfile.objects.get(pet_profile_id=pet_profile_id)
     pet.mark_as_adopted()
     return redirect('co_dashboard')
+'''
 
 
+def update_adoption_status(self, pet_profile_id):
+    pet = PetProfile.objects.get(pet_profile_id=pet_profile_id)
+    pet.update_adoption_status()
+    return redirect('co_dashboard')
+
+'''
 def mark_as_interested(request, pet_profile_id):
     pet = PetProfile.objects.get(pet_profile_id=pet_profile_id)
     adopter = FutureOwner.objects.get(user_id=request.user.user_id)
     pet.mark_as_interested(adopter)
-    return redirect('fo_liked_pets')  # render(request, 'pets/pet_profile.html')
+    return redirect('fo_liked_pets')
+'''
+
+
+  # render(request, 'pets/pet_profile.html')
+def update_interest_status(request, pet_profile_id):
+    pet = PetProfile.objects.get(pet_profile_id=pet_profile_id)
+    adopter = FutureOwner.objects.get(user_id=request.user.user_id)
+    pet.update_interest_status(adopter)
+    return redirect('fo_liked_pets')
 
 
 def inbox(request):
@@ -234,16 +256,30 @@ def inbox(request):
         co = CurrentOwner.objects.get(user_id=id)
     except CurrentOwner.DoesNotExist:
         is_co = False
-
     if is_co:
         #returns two tiered list
         owner = CurrentOwner.objects.get(user_id=id)
-        contactable_users = owner.get_contactable_adopters()
+        #contactable_users = owner.get_contactable_adopters()
+        contacts = []
+        #pets to iterate through
+        pets = owner.view_my_pets()
+        #determine which pets have interested users
+        pets_w_users = []
+        for i in pets:
+            #cast to list the interested users
+            interest_cast_list = list(i.interested_users.all())
+            #if list of interested users is not empty
+            if interest_cast_list:
+                pets_w_users.append(i)
+                for j in interest_cast_list:
+                    contacts.append(j)
     else:
         #returns only owner objects
         adopter = FutureOwner.objects.get(user_id= id)
-        contactable_users = adopter.get_contactable_owners()
-    return render(request, 'messaging/inbox.html', {'is_co': is_co, 'contacts': contactable_users})
+        pets_w_users = None
+        contacts = adopter.get_contactable_owners()
+    return render(request, 'messaging/inbox.html', {'is_co': is_co, 'contacts': contacts, 'pets_w_users': pets_w_users})
+
 
 def direct_message(request, recipient_id):
     sender_id = request.user.user_id
@@ -255,7 +291,7 @@ def direct_message(request, recipient_id):
     message_form = MessageForm(request.POST)
     if message_form.is_valid():
         data = message_form.cleaned_data
-        content = data['content']
+        content = data['message_content']
         time_sent = datetime.datetime.now()
         Message.objects.create_message(content, time_sent,recipient,sender)
     return render(request, 'messaging/direct_message.html',{'past_messages':messages, "form":message_form})

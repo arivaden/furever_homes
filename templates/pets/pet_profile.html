@@ -2,7 +2,6 @@
 {% block content %}
     <h3> {{pet.pet_name}} </h3>
     <hr>
-    {% if pet.profile_pic.url is not None %}
     <div class="container text-center">
         <div class="text-right">
         </div>
@@ -16,6 +15,11 @@
                         <div> {{pet.description}} </div>
                         <div class="font-weight-bold">Rehoming reason: </div>
                         <div> {{pet.rehoming_reason}} </div>
+                        {% if pet.is_adopted %}
+                            <div class="font-weight-bold">This pet has been adopted!</div>
+                        {% else %}
+                            <p>Pet is still looking for a home!</p>
+                        {% endif %}
                     </div>
                     {% if editor %}
                         <div class="text-left">
@@ -24,54 +28,34 @@
                             &#x2022;
                             <a href="{% url 'delete_pet_profile' pet.pet_profile_id %}"> Delete Pet Profile</a>
                             <br><br>
-                            <button type="submit" class="btn btn-success">Mark Pet As Adopted</button>
+                            {% if pet.is_adopted %}
+                                <a href="{% url 'update_adoption_status' pet.pet_profile_id %}">Unmark Pet As Adopted</a>
+                            {% else %}
+                                <a href="{% url 'update_adoption_status' pet.pet_profile_id %}">Mark Pet As Adopted</a>
+                            {% endif %}
                         </div>
                     {% endif %}
                     {% if adopter %}
                     <br>
                     <div class="text-left">
-                        <form action="{% url 'mark_as_interested' pet.pet_profile_id %}" method="POST">
+                        <form action="{% url 'update_interest_status' pet.pet_profile_id %}" method="POST">
                             {% csrf_token %}
-                            <button type="submit" class="btn btn-success">I'm Interested</button>
+                            {% if fo in pet.interested_users.all %}
+                                <p> beep boop 1</p>
+                                <button type="submit" class="btn btn-success">Remove from interested</button>
+                            {% else %}
+                                <p> beep boop </p>
+                                <button type="submit" class="btn btn-success">I'm Interested</button>
+                            {% endif %}
                         </form>
                     </div>
                     {% endif %}
                 </div>
+                {% if pet.profile_pic.url is not None %}
                 <div class="col">
                     <img src="{{pet.profile_pic.url}}" alt="{{pet.pet_name}}" style="border:3px solid gray; border-radius:5px" width="250px" height="250px">
                 </div>
+                {% endif %}
         </div>
     </div>
-    {% else %}
-            <div>
-                <div class="text-right">
-                </div>
-                <div class="font-weight-bold"> Sex:</div><div>{{pet.sex}} </div> <div class="font-weight-bold"> Age:</div> <div>{{pet.age}}</div> <div class="font-weight-bold"> Size:</div> <div>{{pet.size}}</div>
-                <div class="font-weight-bold"> Spayed/Neutered:</div> <div>{{pet.spayed_or_neutered}}</div>
-                <div class="font-weight-bold"> Good With Kids: </div> <div>{{pet.good_w_kids}}</div>
-                <div class="font-weight-bold">Description: </div>
-                <div> {{pet.description}} </div>
-                <div class="font-weight-bold">Rehoming reason: </div>
-                <div> {{pet.rehoming_reason}} </div>
-            </div>
-            {% if adopter %}
-            <br>
-            <div class="text-left">
-                <form action="{% url 'mark_as_interested' pet.pet_profile_id %}" method="POST">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-success">I'm Interested</button>
-                </form>
-            </div>
-            {% endif %}
-            {% if editor %}
-            <div class="text-left">
-                <br>
-                <a href="{% url 'edit_pet_profile' pet.pet_profile_id%}">Edit Pet Profile</a>
-                &#x2022;
-                <a href="{% url 'delete_pet_profile' pet.pet_profile_id %}"> Delete Pet Profile</a>
-                <br><br>
-                <a href="{%url 'mark_as_adopted' pet.pet_profile_id %}">Mark Pet As Adopted</a>
-            {% endif %}
-            </div>
-    {% endif %}
 {% endblock %}

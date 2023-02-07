@@ -70,7 +70,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 		return self.user_name
 
 	def getMessageHistory(self, other_user):
-		user_messages = Message.objects.filter(Q(sender=self.user_id, recipient=other_user.user_id) | Q(sender=other_user.user_id, recipient=self.user_id)).order_by('message_dt')
+		user_messages = Message.objects.filter(Q(sender=self.user_id, receiver=other_user) | Q(sender=other_user, receiver=self.user_id)).order_by('message_dt')
 		return user_messages
 
 
@@ -162,15 +162,16 @@ class CurrentOwner(User):
 	co_id = User.user_id
 
 	def get_contactable_adopters(self):
+		# my_pets = self.view_my_pets()
+		# interested_adopters = []
+		# pet_names = []
+		# pet_dict = {}
+		# for pet in my_pets:
+		# 	#interested_adopters.append(list(pet.interested_users))
+		# 	#pet_names.append(pet.pet_name)
+		# 	pet_dict.update( {pet.pet_name : pet.interested_users.all()} )
+		# return pet_dict #zip(pet_names, interested_adopters)
 		my_pets = self.view_my_pets()
-		interested_adopters = []
-		pet_names = []
-		pet_dict = {}
-		for pet in my_pets:
-			#interested_adopters.append(list(pet.interested_users))
-			#pet_names.append(pet.pet_name)
-			pet_dict.update( {pet.pet_name : pet.interested_users.all()} )
-		return pet_dict #zip(pet_names, interested_adopters)
 
 
 	def view_my_pets(self):
@@ -212,17 +213,17 @@ class Report(models.Model):
 	moderator_assigned = models.ForeignKey(Moderator, on_delete=models.PROTECT)
 
 class MessageManager(models.Manager):
-	def create_message(self, content, time_sent, reciever_id, sender_id):
-		msg = self.model(message_content = content, message_dt=time_sent, receiver_id =reciever_id, sender_id=sender_id)
+	def create_message(self, content, time_sent, reciever, sender):
+		msg = self.model(message_content = content, message_dt=time_sent, receiver=reciever, sender=sender)
 		msg.save()
 		return msg
 
 class Message(models.Model):
 	message_id = models.BigAutoField(primary_key = True)
-	message_dt = models.DateTimeField
+	message_dt = models.DateTimeField(auto_now=True)
 	message_content = models.CharField(max_length=1000)
-	receiver_id = models.ForeignKey(User, models.CASCADE, related_name='receiver')
-	sender_id = models.ForeignKey(User, models.CASCADE, related_name='sender')
+	receiver = models.ForeignKey(User, models.CASCADE, related_name='receiver')
+	sender = models.ForeignKey(User, models.CASCADE, related_name='sender')
 	objects = MessageManager()
 
 
@@ -275,14 +276,28 @@ class PetProfile(models.Model):
 			self.rehoming_reason = rehoming_reason
 		self.save()
 
-	def mark_as_adopted(self):
-		self.is_adopted = True
+	def update_adoption_status(self):
+		#toggle off
+		if self.is_adopted:
+			self.is_adopted = False
+		#toggle on
+		else:
+			self.is_adopted = True
 		self.save()
 
-	#new code, should work according to documentation
-	def mark_as_interested(self, fo):
-		self.interested_users.add(fo)
+	#new codey code code
+	def update_interest_status(self, fo):
+		#in
+		if fo not in self.interested_users.all():
+			self.interested_users.add(fo)
+		#out
+		else:
+			self.interested_users.remove(fo)
 		self.save()
+
+	def show_interested_users(self):
+		print(self.interested_users.all())
+		return self.interested_users
 
 	class Meta:
 		ordering = ["date_uploaded"]
