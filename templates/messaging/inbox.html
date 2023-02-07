@@ -3,7 +3,7 @@
 <body>
     {% if is_co %}
         {% if contacts %}
-            {% for pet_name, adopter_list in contacts %}
+            {% for pet_name,adopter_list in contacts.items %}
             <p>Messages about {{pet.pet_name}}</p>
                     {% for adopter in adopter_list %}
                     <p> <a href="{% url 'direct_message' adopter.user_id %}">{{ adopter.user_name }}</a> </p>
