@@ -3,15 +3,18 @@
 <body>
     {% if is_co %}
         {% if contacts %}
-            {% for pet_name, adopter in contactable_users %}
-                    <p> <a href="{% url 'direct_message' adopter.user_id %}">{{ adopter.user_name }}  Re: {{pet_name}} </a> </p>
+            {% for pet_name, adopter_list in contacts %}
+            <p>Messages about {{pet.pet_name}}</p>
+                    {% for adopter in adopter_list %}
+                    <p> <a href="{% url 'direct_message' adopter.user_id %}">{{ adopter.user_name }}</a> </p>
+                {% endfor %}
             {% endfor %}
         {% else %}
         <p> You cannot contact any adopters yet, since they haven't liked any of your pets. Once they mark a pet
         as interested, you can contact them and vice versa.</p>
         {% endif %}
     {% else %}
-        {% if contactable_users %}
+        {% if contacts %}
             {% for owner in contactable_users %}
             <p><a href="{% url 'direct_message' owner.user_id %}"> {{ owner.user_name }} </a> </p>
             {% endfor %}
