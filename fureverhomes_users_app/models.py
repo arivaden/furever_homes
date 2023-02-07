@@ -169,8 +169,8 @@ class CurrentOwner(User):
 		for pet in my_pets:
 			#interested_adopters.append(list(pet.interested_users))
 			#pet_names.append(pet.pet_name)
-			pet_dict.update( {pet.pet_name : list(pet.interested_users)} )
-		return  pet_dict #zip(pet_names, interested_adopters)
+			pet_dict.update( {pet.pet_name : pet.interested_users.all()} )
+		return pet_dict #zip(pet_names, interested_adopters)
 
 
 	def view_my_pets(self):
