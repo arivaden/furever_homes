@@ -1,3 +1,5 @@
+import datetime
+
 import django
 import os
 from django.db import models
@@ -72,6 +74,28 @@ class User(AbstractBaseUser, PermissionsMixin):
 	def getMessageHistory(self, other_user):
 		user_messages = Message.objects.filter(Q(sender=self.user_id, receiver=other_user) | Q(sender=other_user, receiver=self.user_id)).order_by('message_dt')
 		return user_messages
+
+	def getNewMessages(self):
+		# get all the user's messages
+		new_messages = Message.objects.filter(receiver=self, read=False)
+		return new_messages
+
+	def getMessageNotificationDict(self):
+		new_messages = self.getNewMessages()
+		sender_amount = {}
+		for msg in new_messages:
+			names = sender_amount.keys()
+			name = msg.sender.user_name
+			# if we see another message from someone, increase their amount by 1
+			if name in names:
+				msgs = sender_amount.get(name) + 1
+				sender_amount[name] = msgs
+			else:
+				# we add this sender and their one new message
+				sender_amount.update({name, 1})
+
+		return sender_amount
+
 
 
 #these are subclasses of User
@@ -224,7 +248,12 @@ class Message(models.Model):
 	message_content = models.CharField(max_length=1000)
 	receiver = models.ForeignKey(User, models.CASCADE, related_name='receiver')
 	sender = models.ForeignKey(User, models.CASCADE, related_name='sender')
+	read = models.BooleanField(default=False)
 	objects = MessageManager()
+
+	def mark_read(self):
+		self.read = True
+		self.save()
 
 
 class PetManager(models.Manager):

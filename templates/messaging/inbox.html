@@ -15,6 +15,9 @@
                     {% for j in contacts %}
                         {% if j in i.interested_users.all %} <!-- if a contact is within a pets interested users list, display under pet name -->
                             <a href="{% url 'direct_message' j.fo_id %}"> {{ j.user_name }} </a> <br>
+                            {% if j.user_name in new_message_senders %}
+                    <p> {{new_messages_dict|get_item:j.user_name }} new messages </p>
+                            {% endif %}
                         {% endif %} <!-- IF J IN i.INTERESTED USERS -->
                     {% endfor %} <!-- FOR J IN CONTACTS -->
                                 <hr>
@@ -35,6 +38,9 @@
         {% if contacts %}
             {% for owner in contacts %}
             <p><a href="{% url 'direct_message' owner.user_id %}"> {{ owner.user_name }} </a> </p>
+                {% if owner.user_name in new_message_senders %}
+                    <p> {{new_messages_dict|get_item:owner.user_name }} new messages </p>
+                {% endif %}
             {% endfor %}
         {% else %}
         <p> You cannot contact any owners yet, since you haven't liked any pets. Once you mark a pet

@@ -6,7 +6,7 @@
 {% if past_messages %}
     {% for msg in past_messages %}
     <!-- must align messages to right or left side of screen depending on who they're from (recipient/sender) -->
-    <div align="right">
+    <div align="left">
     <p>{{ msg.sender.user_name }} on {{ msg.message_dt|date:'N d G:i' }}
         <hr>
         {{ msg.message_content }}</p>

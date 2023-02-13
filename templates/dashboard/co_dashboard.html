@@ -2,6 +2,7 @@
 {% load crispy_forms_tags %}
 {% block content %}
 {% if user.is_authenticated %}
+<p> You have {{ new_messages }} new messages </p>
     <h2>Create a profile for your pet here.</h2>
     <button type="submit" onclick="location.href = '{% url 'select_pet_type' %}'" value="submit" class="btn btn-success">Create Profile</button>
 <br><br>

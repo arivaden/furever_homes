@@ -71,13 +71,15 @@ def create_fo_account(request):
 
 def co_dashboard(request):
     owner = CurrentOwner.objects.get(user_id=request.user.user_id)
+    new_messages = owner.getNewMessages()
     pets = owner.view_my_pets()
-    context = {'pets': pets}
+    context = {'pets': pets, 'new_messages': len(new_messages)}
     return render(request, 'dashboard/co_dashboard.html', context)
 
 
 def fo_dashboard(request):
     adopter = FutureOwner.objects.get(user_id=request.user.user_id)
+    new_messages = adopter.getNewMessages()
     pref_form = GetPreferences(request.POST)
     if pref_form.is_valid():
         size = pref_form.cleaned_data['size_pref']
@@ -88,8 +90,8 @@ def fo_dashboard(request):
         sex = pref_form.cleaned_data['sex_pref']
         adopter.edit_preferences(type, size, age, sex, kids, fixed)
         pets_in_area = adopter.find_pets()
-        return render(request, 'dashboard/fo_dashboard.html', {'pref_form': pref_form, 'pet_pool':pets_in_area})
-    return render(request, 'dashboard/fo_dashboard.html', {'pref_form': pref_form})
+        return render(request, 'dashboard/fo_dashboard.html', {'pref_form': pref_form, 'pet_pool':pets_in_area, 'new_messages' :new_messages})
+    return render(request, 'dashboard/fo_dashboard.html', {'pref_form': pref_form, 'new_messages':new_messages})
 
 
 def fo_liked_pets(request):
@@ -273,12 +275,17 @@ def inbox(request):
                 pets_w_users.append(i)
                 for j in interest_cast_list:
                     contacts.append(j)
+        new_messages = co.getNewMessagesDict()
     else:
         #returns only owner objects
         adopter = FutureOwner.objects.get(user_id= id)
         pets_w_users = None
         contacts = adopter.get_contactable_owners()
-    return render(request, 'messaging/inbox.html', {'is_co': is_co, 'contacts': contacts, 'pets_w_users': pets_w_users})
+        new_messages = adopter.getNewMessagesDict()
+        new_message_senders = new_messages.keys()
+    return render(request, 'messaging/inbox.html', {'is_co': is_co, 'contacts': contacts,
+                                                    'pets_w_users': pets_w_users, 'new_messages_dict':new_messages,
+                                                    'new_message_senders':new_message_senders })
 
 
 def direct_message(request, recipient_id):
@@ -287,6 +294,9 @@ def direct_message(request, recipient_id):
     sender = User.objects.get(user_id = sender_id)
     recipient = User.objects.get(user_id=recipient_id)
     messages = sender.getMessageHistory(recipient_id)
+    # once we open the conversation, mark all the messages as read, since the user has seen them
+    for msg in messages:
+        msg.mark_read()
     # should be able to submit a message as a form, and when its created, save DT
     message_form = MessageForm(request.POST)
     if message_form.is_valid():
