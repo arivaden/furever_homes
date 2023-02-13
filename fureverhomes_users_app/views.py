@@ -285,7 +285,7 @@ def inbox(request):
         #new_message_senders = new_messages.keys()
     return render(request, 'messaging/inbox.html', {'is_co': is_co, 'contacts': contacts,
                                                     'pets_w_users': pets_w_users, 'new_messages_dict':new_messages,
-                                                    'new_message_senders':new_messages.keys() })
+                                                    'new_message_senders': new_messages.keys() })
 
 
 def direct_message(request, recipient_id):
