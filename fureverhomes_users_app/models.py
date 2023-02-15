@@ -9,6 +9,7 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.contrib.auth.models import PermissionsMixin
 from django.core import validators
 from django.db.models import Q
+from django_cryptography.fields import encrypt
 
 
 class UserManager(BaseUserManager):
@@ -92,7 +93,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 				sender_amount[name] = msgs
 			else:
 				# we add this sender and their one new message
-				sender_amount.update({name, 1})
+				sender_amount.update({name: 1})
 
 		return sender_amount
 
@@ -197,9 +198,8 @@ class CurrentOwner(User):
 		# return pet_dict #zip(pet_names, interested_adopters)
 		my_pets = self.view_my_pets()
 
-
 	def view_my_pets(self):
-		co_pets = PetProfile.objects.filter(current_owner=self.user_id).exclude(is_adopted=True)
+		co_pets = PetProfile.objects.filter(current_owner=self.user_id)#.exclude(is_adopted=True)
 		print("Got pets of"+str(self.user_name)) #output line for testing purposes
 		return co_pets
 
@@ -288,7 +288,7 @@ class PetProfile(models.Model):
 	interested_users = models.ManyToManyField(FutureOwner)
 	objects = PetManager()
 
-	def edit_pet_profile(self, pet_name=None, description=None, profile_pic=None, spayed_neutered=None, sex=None, size=None, rehoming_reason=None):
+	def edit_pet_profile(self, pet_name=None, description=None, profile_pic=None, spayed_neutered=None, sex=None, size=None, age=None, rehoming_reason=None, good_w_kids=None, **extra_fields):
 		if pet_name is not None:
 			self.pet_name = pet_name
 		if description is not None:
@@ -301,8 +301,21 @@ class PetProfile(models.Model):
 			self.sex = sex
 		if size is not None:
 			self.size = size
+		if age is not None:
+			self.age = age
 		if rehoming_reason is not None:
 			self.rehoming_reason = rehoming_reason
+		if good_w_kids is not None:
+			self.good_w_kids = good_w_kids
+		isCat = False
+		try:
+			dog = Dog.objects.get(pet_profile_id=self.pet_profile_id)
+		except Dog.DoesNotExist:
+			isCat = True
+		if isCat:
+			self.is_declawed = extra_fields['is_declawed']
+		else:
+			self.breed = extra_fields['breed']
 		self.save()
 
 	def update_adoption_status(self):

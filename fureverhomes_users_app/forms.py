@@ -134,7 +134,6 @@ class MessageForm(forms.ModelForm):
 		error_messages = {"message_content" : {"max_length": _("Your message is too long. Please shorten it.") } }
 
 
-
 		'''
 #first name
 forms.CharField()

@@ -1,52 +1,59 @@
 {% extends "base.html" %}
 {% block content %}
+{% load dictionary_filters %}
 <body>
 {% if is_co %}
-    <h2>Inbox</h2>
-    <hr>
-    <div class="container text-center">
-        <div class="row">
-            <div class="col">
-                <div class="text-left">
-                    {% if contacts %} <!-- FOR CO, contacts will be empty if no one has show interest in a pet -->
-                        {% for i in pets_w_users %} <!-- iterate through pets with interested users -->
-                            <div class="font-weight-bold">Pet name:</div><a href="{% url 'pet_profile' i.pet_profile_id%}">{{ i.pet_name }}</a><br>
-                    <div class="font-weight-bold">Interested adopters:</div>
-                    {% for j in contacts %}
-                        {% if j in i.interested_users.all %} <!-- if a contact is within a pets interested users list, display under pet name -->
-                            <a href="{% url 'direct_message' j.fo_id %}"> {{ j.user_name }} </a> <br>
-                            {% if j.user_name in new_message_senders %}
-                    <p> {{new_messages_dict|get_item:j.user_name }} new messages </p>
-                            {% endif %}
-                        {% endif %} <!-- IF J IN i.INTERESTED USERS -->
-                    {% endfor %} <!-- FOR J IN CONTACTS -->
-                                <hr>
-                </div>
-            </div>
-                {% if i.profile_pic.url is not None %}
-                    <div class="col">
-                        <img src="{{i.profile_pic.url}}" alt="{{i.pet_name}}" style="border:3px solid gray; border-radius:5px" width="250px" height="250px">
-                    </div>
-                {% endif %}
-            {% endfor %} <!-- FOR I IN PETS -->
-        </div>
+<h2>Inbox</h2>
+<hr>
+{% if contacts %} <!-- FOR CO, contacts will be empty if no one has show interest in a pet -->
+{% for i in pets_w_users %} <!-- iterate through pets with interested users -->
+<div class="container text-center">
+<div class="row">
+    <div class="col">
+        <div class="text-left">
+<div class="font-weight-bold">Pet name:</div>
+<a href="{% url 'pet_profile' i.pet_profile_id%}">{{ i.pet_name }}</a><br>
+<div class="font-weight-bold">Interested adopters:</div>
+{% for j in contacts %}
+{% if j in i.interested_users.all %}
+<!-- if a contact is within a pets interested users list, display under pet name -->
+<a href="{% url 'direct_message' j.fo_id %}"> {{ j.user_name }} </a> <br>
+{% if j.user_name in new_message_senders %}
+<p> {{new_messages_dict|get_item:j.user_name }} new messages </p>
+{% endif %}
+{% endif %} <!-- IF J IN i.INTERESTED USERS -->
+{% endfor %} <!-- FOR J IN CONTACTS -->
+        </div></div>
+{% if i.profile_pic.url is not None %}
+    <div class="col">
+    <img src="{{i.profile_pic.url}}" alt="{{i.pet_name}}" style="border:3px solid gray; border-radius:5px" width="250px"
+         height="250px">
     </div>
-    {% else %} <!-- CONTACTS -->
-            <p> You cannot contact any adopters yet, since they haven't liked any of your pets. Once they mark a pet as interested, you can contact them and vice versa.</p>
-    {% endif %} <!-- CONTACTS -->
-{% else %} <!-- IS CO -->
-        {% if contacts %}
-            {% for owner in contacts %}
-            <p><a href="{% url 'direct_message' owner.user_id %}"> {{ owner.user_name }} </a> </p>
-                {% if owner.user_name in new_message_senders %}
-                    <p> {{new_messages_dict|get_item:owner.user_name }} new messages </p>
-                {% endif %}
-            {% endfor %}
-        {% else %}
-        <p> You cannot contact any owners yet, since you haven't liked any pets. Once you mark a pet
-        as interested, you can contact their owner.</p>
-        {% endif %}
     {% endif %}
+<hr>
+</div>
+</div>
+<br><hr><br>
+{% endfor %} <!-- FOR I IN PETS -->
+{% else %} <!-- CONTACTS -->
+<p> You cannot contact any adopters yet, since they haven't liked any of your pets. Once they mark a pet as interested,
+    you can contact them and vice versa.</p>
+{% endif %} <!-- CONTACTS -->
+{% else %} <!-- IS CO -->
+{% if contacts %}
+{% for owner in contacts %}
+<p><a href="{% url 'direct_message' owner.user_id %}"> {{ owner.user_name }} </a></p>
+{% if owner.user_name in new_message_senders %}
+{% for o in objects %}
+<p> {{new_messages_dict|get_item:owner.user_name }} new messages </p>
+{% endfor %}
+{% endif %}
+{% endfor %}
+{% else %}
+<p> You cannot contact any owners yet, since you haven't liked any pets. Once you mark a pet
+    as interested, you can contact their owner.</p>
+{% endif %}
+{% endif %}
 </body>
 {% endblock %}
 

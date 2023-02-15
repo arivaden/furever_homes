@@ -1,5 +1,5 @@
 from django.http import HttpResponseRedirect
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .forms import CreateCOAccount, CreateFOAccount, Login, DogForm, CatForm, GetPreferences, MessageForm
 from .models import CurrentOwner, FutureOwner, PetProfile, Dog, Cat, Message, User
 import datetime
@@ -200,20 +200,48 @@ def pet_profile(request, pet_profile_id):
 
 
 def edit_pet_profile(request, pet_profile_id):
-    pet = PetProfile.objects.get(pet_profile_id = pet_profile_id)
-    id = pet_profile_id
+    pet = get_object_or_404(PetProfile, pet_profile_id=pet_profile_id)
     isCat = True
     try:
-        pet = Cat.objects.get(pet_profile_id=id)
+        pet = get_object_or_404(Cat, pet_profile_id=pet_profile_id)
     except pet.DoesNotExist:
         isCat = False
 
     if isCat:
-        form = CatForm(request.POST, request.FILES)
-        return render(request, 'pets/edit_pet_profile.html', {'form': form})
+        form = CatForm(request.POST or None, instance=pet)
+        if form.is_valid():
+            pet_name = form.cleaned_data['pet_name']
+            description = form.cleaned_data['description']
+            profile_pic = form.cleaned_data['profile_pic']
+            age = form.cleaned_data['age']
+            sex = form.cleaned_data['sex']
+            size = form.cleaned_data['size']
+            good_w_kids = form.cleaned_data['good_w_kids']
+            spayed_or_neutered = form.cleaned_data['spayed_or_neutered']
+            rehoming_reason = form.cleaned_data['rehoming_reason']
+            owner = CurrentOwner.objects.get(user_id=request.user.user_id)
+            declawed = form.cleaned_data['is_declawed']
+            pet.edit_pet_profile(pet_name, description, profile_pic, spayed_or_neutered, sex, size, age, rehoming_reason, good_w_kids,
+            is_declawed=declawed)
+            return redirect('co_dashboard')
     else:
-        form = DogForm(request.POST, request.FILES)
-        return render(request, 'pets/edit_pet_profile.html', {'form': form})
+        form = DogForm(request.POST or None, instance=pet)
+        if form.is_valid():
+            data = form.cleaned_data
+            pet_name = data['pet_name']
+            description = data['description']
+            profile_pic = data['profile_pic']
+            age = data['age']
+            sex = data['sex']
+            size = data['size']
+            good_w_kids = data['good_w_kids']
+            spayed_or_neutered = data['spayed_or_neutered']
+            rehoming_reason = data['rehoming_reason']
+            owner = CurrentOwner.objects.get(user_id=request.user.user_id)
+            breed = form.cleaned_data['breed']
+            pet.edit_pet_profile(pet_name, description, profile_pic, spayed_or_neutered, sex, size, age, rehoming_reason, good_w_kids, breed=breed)
+            return redirect('co_dashboard')  # return render(request, 'dashboard/co_dashboard.html')
+    return render(request, 'pets/edit_pet_profile.html', {'form': form})
 
 
 def delete_pet_profile(self, pet_profile_id):
@@ -262,26 +290,29 @@ def inbox(request):
         #returns two tiered list
         owner = CurrentOwner.objects.get(user_id=id)
         #contactable_users = owner.get_contactable_adopters()
-        contacts = []
+        #had to make it into a set because if a user liked two pets from
+        #the same current owner, then the user would appear two times under every pet
+        contacts = set()
         #pets to iterate through
         pets = owner.view_my_pets()
         #determine which pets have interested users
         pets_w_users = []
         for i in pets:
             #cast to list the interested users
-            interest_cast_list = list(i.interested_users.all())
+            interest_cast_set = set(i.interested_users.all())
             #if list of interested users is not empty
-            if interest_cast_list:
+            if interest_cast_set:
                 pets_w_users.append(i)
-                for j in interest_cast_list:
-                    contacts.append(j)
-        new_messages = co.getNewMessagesDict()
+                for j in interest_cast_set:
+                    contacts.add(j)
+        new_messages = co.getMessageNotificationDict()
+        new_message_senders = new_messages.keys()
     else:
         #returns only owner objects
         adopter = FutureOwner.objects.get(user_id= id)
         pets_w_users = None
         contacts = adopter.get_contactable_owners()
-        new_messages = adopter.getNewMessagesDict()
+        new_messages = adopter.getMessageNotificationDict()
         #new_message_senders = new_messages.keys()
     return render(request, 'messaging/inbox.html', {'is_co': is_co, 'contacts': contacts,
                                                     'pets_w_users': pets_w_users, 'new_messages_dict':new_messages,
@@ -304,4 +335,5 @@ def direct_message(request, recipient_id):
         content = data['message_content']
         time_sent = datetime.datetime.now()
         Message.objects.create_message(content, time_sent,recipient,sender)
-    return render(request, 'messaging/direct_message.html',{'past_messages':messages, "form":message_form})
+        return HttpResponseRedirect('')
+    return render(request, 'messaging/direct_message.html',{'past_messages':messages, "form":message_form, 'recipient':recipient})
