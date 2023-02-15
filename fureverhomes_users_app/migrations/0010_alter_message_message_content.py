@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('fureverhomes_users_app', '0009_alter_message_message_content'),
+        'fureverhomes_users_app',
     ]
 
     operations = [
