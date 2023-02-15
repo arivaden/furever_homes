@@ -9,8 +9,6 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.contrib.auth.models import PermissionsMixin
 from django.core import validators
 from django.db.models import Q
-from django_cryptography.fields import encrypt
-
 
 class UserManager(BaseUserManager):
 	use_in_migrations = True
