@@ -71,7 +71,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 		return self.user_name
 
 	def getMessageHistory(self, other_user):
-		user_messages = Message.objects.filter(Q(sender=self.user_id, receiver=other_user) | Q(sender=other_user, receiver=self.user_id)).order_by('message_dt')
+		user_messages = Message.objects.filter(Q(sender=self.user_id, receiver=other_user) | Q(sender=other_user, receiver=self.user_id)).order_by('message_id')
 		return user_messages
 
 	def getNewMessages(self):
@@ -242,7 +242,7 @@ class MessageManager(models.Manager):
 
 class Message(models.Model):
 	message_id = models.BigAutoField(primary_key = True)
-	message_dt = models.DateTimeField(auto_now=True)
+	message_dt = models.DateTimeField()
 	message_content = models.CharField(max_length=1000)
 	receiver = models.ForeignKey(User, models.CASCADE, related_name='receiver')
 	sender = models.ForeignKey(User, models.CASCADE, related_name='sender')

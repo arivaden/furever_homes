@@ -133,13 +133,3 @@ class MessageForm(forms.ModelForm):
 		help_texts = { 'message_content' : _("Write your message, but please keep it under 1000 characters") }
 		error_messages = {"message_content" : {"max_length": _("Your message is too long. Please shorten it.") } }
 
-
-		'''
-#first name
-forms.CharField()
-#last name
-forms.CharField()
-#email
-forms.EmailField()
-#password (will have requirements, at least 8 characters, num/char mix)
-forms.RegexField() '''

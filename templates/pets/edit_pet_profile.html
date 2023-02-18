@@ -2,7 +2,7 @@
 {% load crispy_forms_tags %}
 {% block content %}
 <h2>Edit your pet's details</h2>
-<form action="" method="post" enctype="multipart/form-data">
+<form action="" method="post" enctype="multipart/form-data" autocomplete="off">
     {{ form|crispy }}
     {% csrf_token %}
     <button type="submit" class="btn btn-success">Edit Pet Profile</button>
