@@ -9,6 +9,7 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.contrib.auth.models import PermissionsMixin
 from django.core import validators
 from django.db.models import Q
+from django_cryptography.fields import encrypt
 
 class UserManager(BaseUserManager):
 	use_in_migrations = True
@@ -243,7 +244,7 @@ class MessageManager(models.Manager):
 class Message(models.Model):
 	message_id = models.BigAutoField(primary_key = True)
 	message_dt = models.DateTimeField()
-	message_content = models.CharField(max_length=1000)
+	message_content = encrypt(models.CharField(max_length=1000))
 	receiver = models.ForeignKey(User, models.CASCADE, related_name='receiver')
 	sender = models.ForeignKey(User, models.CASCADE, related_name='sender')
 	read = models.BooleanField(default=False)

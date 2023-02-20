@@ -4,7 +4,6 @@ from .forms import CreateCOAccount, CreateFOAccount, Login, DogForm, CatForm, Ge
 from .models import CurrentOwner, FutureOwner, PetProfile, Dog, Cat, Message, User
 import datetime
 
-
 def home(request):
     form = Login(request.POST)
     if request.method == "POST":
