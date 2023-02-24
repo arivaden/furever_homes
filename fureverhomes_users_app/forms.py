@@ -79,16 +79,14 @@ class CreateCOAccount(forms.ModelForm):
 			'password' : _("Password"),
 			'user_dob' : _("Date of Birth"),
 			'user_zip': _("Zipcode")
-
 		}
-
 		help_texts = {
 			'user_dob': "YYYY-MM-DD format"
 		}
+		widgets = {'password': forms.PasswordInput()}
 
 
 class CreateFOAccount(forms.ModelForm):
-
 	class Meta:
 		model = FutureOwner
 		fields = ['user_email', 'password', 'user_name', 'user_dob', 'user_zip']
@@ -97,12 +95,11 @@ class CreateFOAccount(forms.ModelForm):
 			'password': _("Password"),
 			'user_dob': _("Your date of Birth"),
 			'user_zip': _("Zipcode")
-
 		}
-
 		help_texts = {
 			'user_dob' : "YYYY-MM-DD format"
 		}
+		widgets = { 'password': forms.PasswordInput() }
 
 class GetPreferences(forms.ModelForm):
 
@@ -116,7 +113,6 @@ class GetPreferences(forms.ModelForm):
 			'sex_pref': _("Gender"),
 			'kids_pref': _("Should the pet be good with kids?"),
 			'fixed_pref': _("Should the pet be fixed?")
-
 		}
 
 class Login(forms.ModelForm):

@@ -2,6 +2,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import CreateCOAccount, CreateFOAccount, Login, DogForm, CatForm, GetPreferences, MessageForm
 from .models import CurrentOwner, FutureOwner, PetProfile, Dog, Cat, Message, User
+from django.forms import HiddenInput
 import datetime
 
 def home(request):
