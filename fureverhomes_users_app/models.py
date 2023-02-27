@@ -340,6 +340,11 @@ class PetProfile(models.Model):
 		print(self.interested_users.all())
 		return self.interested_users
 
+	def get_current_owner_name(self):
+		co = self.current_owner
+		name = co.user_name
+		return name
+
 	class Meta:
 		ordering = ["date_uploaded"]
 
