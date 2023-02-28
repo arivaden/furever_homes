@@ -49,15 +49,15 @@
 {% if contacts %}
 {% if new_message_senders %}
 <h3>New Messages</h3>
-{% for owner in contacts %}
+{% for owner,pet_name in contacts,pets_w_users %}
 {% if owner.user_name in new_message_senders %}
-<p><a href="{% url 'direct_message' owner.user_id%}"> {{ owner.user_name }}</a></p>
+<p><a href="{% url 'direct_message' owner.user_id%}"> {{ owner.user_name }} owner of {{pet_name}}</a></p>
 {% endif %}
 {% endfor %}
 <h3>Contacts</h3>
-{% for owner in contacts %}
+{% for owner,pet_name in contacts,pets_w_users %}
 {% if owner.user_name not in new_message_senders %}
-<p><a href="{% url 'direct_message' owner.user_id %}"> {{ owner.user_name }}</a></p>
+<p><a href="{% url 'direct_message' owner.user_id %}"> {{ owner.user_name }} owner of {{pet_name}}</a></p>
 {% endif %}
 {% endfor %}
 {% else %}

@@ -117,11 +117,13 @@ class FutureOwner(User):
 	def get_contactable_owners(self):
 		liked_pets = self.view_liked_pets()
 		owners_of_pets = []
+		pet_names = []
 		for pet in liked_pets:
 			owner = pet.current_owner
 			owners_of_pets.append(owner)
-		print(owners_of_pets)
-		return owners_of_pets
+			pet_names.append(pet.pet_name)
+		#print(owners_of_pets)
+		return [pet_names, owners_of_pets]
 
 
 	# user can input preferences specific for dogs/cats

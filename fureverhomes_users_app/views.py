@@ -192,7 +192,8 @@ def pet_profile(request, pet_profile_id):
         "description": pet_model.description,
         "rehoming_reason" : pet_model.rehoming_reason,
         "is_adopted": pet_model.is_adopted,
-        "interested_users": pet_model.interested_users
+        "interested_users": pet_model.interested_users,
+        "owner_name" : pet_model.get_current_owner_name(),
     }
     if adopter:
         fo = FutureOwner.objects.get(user_id=id)
@@ -312,8 +313,9 @@ def inbox(request):
     else:
         #returns only owner objects
         adopter = FutureOwner.objects.get(user_id= id)
-        pets_w_users = None
-        contacts = adopter.get_contactable_owners()
+        owners_and_pets = adopter.get_contactable_owners()
+        pets_w_users = owners_and_pets[0]
+        contacts = owners_and_pets[1]
         contacts = set(contacts)
 
         new_messages = adopter.getMessageNotificationDict()
