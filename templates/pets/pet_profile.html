@@ -15,8 +15,7 @@
                         <div> {{pet.description}} </div>
                         <div class="font-weight-bold">Rehoming reason: </div>
                         <div> {{pet.rehoming_reason}} </div>
-                        <div> Owner :</div>
-                        <div>{{pet.owner_name}}</div>
+                        <div class="font-weight-bold">Owner's name: </div><div>{{ pet.owner_name }}</div>
                         {% if pet.is_adopted %}
                             <div class="font-weight-bold"> Adoption status:</div> <div>{{pet.pet_name}} has been adopted!</div>
                         {% else %}

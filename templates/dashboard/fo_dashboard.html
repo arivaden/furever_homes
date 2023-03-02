@@ -1,7 +1,8 @@
-{% extends "base.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
 {% if user.is_authenticated %}
+{% include "base.html" %}
+<div class="container text-left">
 <div id="content"><p><a href="{% url 'fo_liked_pets' %}"> My Liked Pets Page</a></p></div>
 <head>
     <meta charset="UTF-8">
@@ -40,8 +41,9 @@
     {% endif %}
     </div>
 {% else %}
-    <p> You are not logged in</p>
-<p><a href="{% url 'home' %}"> Login Here</a></p>
+    {% include "no_auth_base.html" %}
+    <div class="container text-left"> <h3>You are not logged in.</h3>
+    <p><a href="{% url 'home' %}"> Login Here</a></p>
+    </div>
     {% endif %}
-</body>
     {% endblock %}

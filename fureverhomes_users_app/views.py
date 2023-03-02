@@ -183,6 +183,7 @@ def pet_profile(request, pet_profile_id):
     pet = {
         "pet_profile_id" : pet_model.pet_profile_id,
         "pet_name" : pet_model.pet_name,
+        "owner_name": pet_model.current_owner.getName(),
         "size" : size_choices.get(pet_model.size),
         "sex" : sex_choices.get(pet_model.sex),
         "spayed_or_neutered" : spayed_neutered,
@@ -206,10 +207,10 @@ def edit_pet_profile(request, pet_profile_id):
     pet = get_object_or_404(PetProfile, pet_profile_id=pet_profile_id)
     isCat = True
     try:
-        pet = get_object_or_404(Cat, pet_profile_id=pet_profile_id)
+        pet = Cat.objects.get(pet_profile_id=pet_profile_id)
     except pet.DoesNotExist:
         isCat = False
-
+    print(isCat, "after exception")
     if isCat:
         form = CatForm(request.POST or None, instance=pet)
         if form.is_valid():
@@ -310,6 +311,7 @@ def inbox(request):
                     contacts.add(j)
         new_messages = co.getMessageNotificationDict()
         new_message_senders = new_messages.keys()
+        liked_pets = None
     else:
         #returns only owner objects
         adopter = FutureOwner.objects.get(user_id= id)
@@ -317,12 +319,12 @@ def inbox(request):
         pets_w_users = owners_and_pets[0]
         contacts = owners_and_pets[1]
         contacts = set(contacts)
-
+        liked_pets = adopter.view_liked_pets()
         new_messages = adopter.getMessageNotificationDict()
         #new_message_senders = new_messages.keys()
     return render(request, 'messaging/inbox.html', {'is_co': is_co, 'contacts': contacts,
                                                     'pets_w_users': pets_w_users, 'new_messages_dict':new_messages,
-                                                    'new_message_senders': new_messages.keys() })
+                                                    'new_message_senders': new_messages.keys(), 'liked_pets': liked_pets })
 
 
 def direct_message(request, recipient_id):

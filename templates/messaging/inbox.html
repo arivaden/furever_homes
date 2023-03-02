@@ -46,33 +46,34 @@
     you can contact them and vice versa.</p>
 {% endif %} <!-- CONTACTS -->
 {% else %} <!-- IS CO -->
-{% if contacts %}
-{% if new_message_senders %}
-<h3>New Messages</h3>
-{% for owner,pet_name in contacts,pets_w_users %}
-{% if owner.user_name in new_message_senders %}
-<p><a href="{% url 'direct_message' owner.user_id%}"> {{ owner.user_name }} owner of {{pet_name}}</a></p>
-{% endif %}
+    <h2>Inbox</h2>
+<hr>
+{% if liked_pets %}
+{% for i in liked_pets %}
+<div class="container text-center">
+    <div class="row">
+        <div class="col">
+            <div class="text-left">
+                <div class="font-weight-bold">Pet Name:</div>
+                    <a href="{% url 'pet_profile' i.pet_profile_id%}"> {{ i.pet_name }}</a><br><br>
+                <div class="font-weight-bold">Owner:</div>
+                    {% if i.current_owner.user_name in new_message_senders %}
+                        <p><a href="{% url 'direct_message' i.current_owner.user_id %}"> {{ i.current_owner.user_name }}</a>- New messages</p>
+                    {% else %}
+                        <a href="{% url 'direct_message' i.current_owner.user_id %}"> {{ i.current_owner.user_name }}</a>
+                    {% endif %}
+            </div>
+        </div>
+        {% if i.profile_pic.url is not None %}
+        <div class="col">
+            <img src="{{i.profile_pic.url}}" alt="{{i.pet_name}}" style="border:3px solid gray; border-radius:5px" width="250px" height="250px">
+        </div>
+        {% endif %}
+        </div>
+        </div>
+    <br><hr>
 {% endfor %}
-<h3>Contacts</h3>
-{% for owner,pet_name in contacts,pets_w_users %}
-{% if owner.user_name not in new_message_senders %}
-<p><a href="{% url 'direct_message' owner.user_id %}"> {{ owner.user_name }} owner of {{pet_name}}</a></p>
-{% endif %}
-{% endfor %}
-{% else %}
-<h3>Contacts</h3>
-{% for owner in contacts %}
-{% if owner.user_name not in new_message_senders %}
-<p><a href="{% url 'direct_message' owner.user_id %}"> {{ owner.user_name }}</a></p>
-{% endif %}
-{% endfor %}
-{% endif %}
-{% else %}
-<p> You cannot contact any owners yet, since you haven't liked any pets. Once you mark a pet
-    as interested, you can contact their owner.</p>
 {% endif %}
 {% endif %}
-</body>
 {% endblock %}
 

@@ -1,7 +1,8 @@
-{% extends "base.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
 {% if user.is_authenticated %}
+{% include "base.html" %}
+<div class="container text-left">
 <p> You have {{ new_messages }} new messages </p>
     <h2>Create a profile for your pet here.</h2>
     <button type="submit" onclick="location.href = '{% url 'select_pet_type' %}'" value="submit" class="btn btn-success">Create Profile</button>
@@ -55,7 +56,9 @@
     {% endif %}
 </div>
     {% else %}
-    <p> You are not logged in</p>
-<p><a href="{% url 'home' %}"> Login Here</a></p>
+    {% include "no_auth_base.html" %}
+    <div class="container text-left"> <h3>You are not logged in.</h3>
+    <p><a href="{% url 'home' %}"> Login Here</a></p>
+    </div>
     {% endif %}
 {% endblock %}

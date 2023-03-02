@@ -126,6 +126,7 @@ class FutureOwner(User):
 		return [pet_names, owners_of_pets]
 
 
+
 	# user can input preferences specific for dogs/cats
 	def specific_preferences(self):
 		pass
